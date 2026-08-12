@@ -101,10 +101,12 @@ function reset() {
 }
 
 async function generate() {
+	error.value = "";
 	try {
 		downloadUrl.value = URL.createObjectURL(await build(edits.value, newLogo.value?.bytes));
 	} catch (e) {
 		error.value = e instanceof Error ? e.message : String(e);
+		progress.value = 0;
 	}
 }
 
@@ -373,6 +375,12 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
         </div>
         <div class="ansi-line" data-testid="progress">
           <span class="row-edge">║ </span><span class="body-text">{{ pad(bar) }}</span><span class="row-edge"> ║</span>
+        </div>
+        <div v-if="busy" class="ansi-line">
+          <span class="row-edge">║ </span><span class="dim-text">{{ pad("  " + status + " ...") }}</span><span class="row-edge"> ║</span>
+        </div>
+        <div v-if="error" class="ansi-line" data-testid="output-error">
+          <span class="row-edge">║ </span><span class="body-text">{{ pad("  " + t("bc250.failed") + " " + error) }}</span><span class="row-edge"> ║</span>
         </div>
         <div class="ansi-line"><span class="row-edge">║ </span><span class="dim-text">{{ pad(t("bc250.verifyNote")) }}</span><span class="row-edge"> ║</span></div>
         <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>

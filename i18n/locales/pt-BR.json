@@ -60,6 +60,7 @@
 		],
 		"logoFill": "preencher o canvas (corta o que sobra)",
 		"logoNew": "nova",
-		"logoScreen": "como fica numa tela 1080p"
+		"logoScreen": "como fica numa tela 1080p",
+		"failed": "falhou:"
 	}
 }

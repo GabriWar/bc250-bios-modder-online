@@ -132,18 +132,33 @@ export function useBc250Bios() {
 			await step(0.3);
 			const out = await sealContainer(container, lzma);
 
-			status.value = "verifying";
-			await step(0.75);
+			// Reported step by step. Reopening the image is the slowest thing
+			// here and it blocks the tab, so a single 75% tick is indistinguishable
+			// from a hang to anyone watching the bar.
+			status.value = "verifying size";
+			await step(0.78);
 			if (out.length !== original.length)
 				throw new Error(`size changed: ${out.length} vs ${original.length}`);
+
+			status.value = "reopening the image";
+			await step(0.82);
 			const check = await openContainer(out, lzma);
+
+			status.value = "verifying files";
+			await step(0.9);
 			if (check.files.length !== container.files.length)
 				throw new Error(`file count changed: ${check.files.length} vs ${container.files.length}`);
+
 			if (logo) {
+				status.value = "verifying logo";
+				await step(0.94);
 				const back = await findLogo(check, lzma);
 				if (!back || back.data.length !== logo.length || !back.data.every((v, i) => v === logo[i]))
 					throw new Error("the logo does not read back as written");
 			}
+
+			status.value = "verifying colours";
+			await step(0.97);
 			for (const p of findPalettes(check))
 				for (const [index, rgb] of edits)
 					if (p.colors[index] !== rgb)

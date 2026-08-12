@@ -60,6 +60,7 @@
 		],
 		"logoFill": "fill the canvas (crops to fit)",
 		"logoNew": "new",
-		"logoScreen": "as it lands on a 1080p screen"
+		"logoScreen": "as it lands on a 1080p screen",
+		"failed": "failed:"
 	}
 }

@@ -39,32 +39,86 @@ export interface PaletteRef {
 	colors: number[];
 }
 
-function locate(buf: Uint8Array, start: number, end: number): number | null {
-	const hits: number[] = [];
-	for (let base = start; base + 64 <= end; base += 4) {
-		if (!(buf[base + 60] === 0xff && buf[base + 61] === 0xff && buf[base + 62] === 0xff)) continue;
-		let ok = true;
-		const seen = new Set<number>();
-		for (let k = 0; k < PALETTE_SIZE; k++) {
-			if (buf[base + 4 * k + 3] !== 0) {
-				ok = false;
-				break;
-			}
-			seen.add((buf[base + 4 * k]! << 16) | (buf[base + 4 * k + 1]! << 8) | buf[base + 4 * k + 2]!);
-		}
-		if (ok && seen.size >= 8) hits.push(base);
+const readColor = (b: Uint8Array, o: number) => (b[o + 2]! << 16) | (b[o + 1]! << 8) | b[o]!;
+
+// Bytes that follow each table. Colour edits never reach them, unlike a
+// signature keyed on palette content, which stops matching the moment someone
+// repaints the index it depended on. Identical across 21 images, AMI and
+// MeiMei, stock and already modified.
+const TAIL: Record<keyof typeof MODULES, number[]> = {
+	screen: [0x41, 0x00, 0x4d, 0x00, 0x49, 0x00, 0x20, 0x00, 0x47, 0x00, 0x72, 0x00],
+	popups: [0x00, 0x00, 0x80, 0x00, 0x00, 0x01, 0x00, 0x03, 0x00, 0x20, 0x80, 0x20],
+};
+
+// Factory colours, only to break ties on an image whose tail is unrecognised.
+const STOCK: Record<keyof typeof MODULES, number[]> = {
+	screen: [
+		0x000000, 0x000098, 0x009800, 0x009898, 0x980000, 0x980098, 0x804000, 0x989898, 0x101010,
+		0x1010ff, 0x10ff10, 0xe0ffff, 0xff1010, 0xff10f0, 0xffff10, 0xffffff,
+	],
+	popups: [
+		0x000000, 0x000098, 0x009800, 0x009898, 0x980000, 0x980098, 0x989800, 0x989898, 0x303030,
+		0x0000ff, 0x00ff00, 0x00ffff, 0xff0000, 0xff00ff, 0xffff00, 0xffffff,
+	],
+};
+
+// Sixteen EFI_GRAPHICS_OUTPUT_BLT_PIXEL: blue, green, red, reserved. The
+// reserved byte is what makes the shape checkable, and a real table carries
+// real variety, so a run of repeated or blank data cannot pass for one.
+// Necessary but nowhere near sufficient: this alone matches 2289 places inside
+// the screen module and 5733 inside popups.
+function looksLikePalette(buf: Uint8Array, base: number): boolean {
+	const seen = new Set<number>();
+	for (let k = 0; k < PALETTE_SIZE; k++) {
+		if (buf[base + 4 * k + 3] !== 0) return false;
+		seen.add((buf[base + 4 * k]! << 16) | (buf[base + 4 * k + 1]! << 8) | buf[base + 4 * k + 2]!);
 	}
-	return hits.length === 1 ? hits[0]! : null;
+	return seen.size >= 8;
 }
 
-const readColor = (b: Uint8Array, o: number) => (b[o + 2]! << 16) | (b[o + 1]! << 8) | b[o]!;
+function locate(
+	buf: Uint8Array,
+	start: number,
+	end: number,
+	which: keyof typeof MODULES,
+): number | null {
+	const shaped: number[] = [];
+	for (let base = start; base + 64 <= end; base += 4)
+		if (looksLikePalette(buf, base)) shaped.push(base);
+
+	// Both signals are required, never either alone. Over 627900 positions in
+	// 21 images the tail matched 21 times, once per image, and every one of
+	// those also passed the shape check.
+	const tail = TAIL[which];
+	const anchored = shaped.filter((base) => tail.every((b, i) => buf[base + 64 + i] === b));
+	if (anchored.length === 1) return anchored[0]!;
+
+	// Only reached on an image whose tail this does not know. Falls back to how
+	// closely a candidate still resembles the factory table, which holds while
+	// most indices are untouched and refuses rather than guessing when the
+	// winner is not clear.
+	const stock = STOCK[which];
+	let best = -1;
+	let at: number | null = null;
+	let ties = 0;
+	for (const base of shaped) {
+		let score = 0;
+		for (let k = 0; k < PALETTE_SIZE; k++) if (readColor(buf, base + 4 * k) === stock[k]) score++;
+		if (score > best) {
+			best = score;
+			at = base;
+			ties = 1;
+		} else if (score === best) ties++;
+	}
+	return ties === 1 && best >= 4 ? at : null;
+}
 
 export function findPalettes(c: Container): PaletteRef[] {
 	const out: PaletteRef[] = [];
 	for (const which of Object.keys(MODULES) as (keyof typeof MODULES)[]) {
 		const body = moduleBody(c, MODULES[which]);
 		if (!body) throw new Error(`module for ${which} not found`);
-		const at = locate(c.payload, body.start, body.end);
+		const at = locate(c.payload, body.start, body.end, which);
 		if (at === null) throw new Error(`palette not located in ${which}`);
 		out.push({
 			which,
