@@ -57,8 +57,11 @@ const TAIL: Record<keyof typeof MODULES, number[]> = {
 	popups: [0x00, 0x00, 0x80, 0x00, 0x00, 0x01, 0x00, 0x03, 0x00, 0x20, 0x80, 0x20],
 };
 
-// Factory colours, only to break ties on an image whose tail is unrecognised.
-const STOCK: Record<keyof typeof MODULES, number[]> = {
+// Factory colours. Used to break ties on an image whose tail is unrecognised,
+// and as the reference the UI compares against: an image that has already been
+// repainted is not a baseline, so "the original" has to mean the factory table
+// rather than whatever the uploaded file happens to carry.
+export const STOCK: Record<keyof typeof MODULES, number[]> = {
 	screen: [
 		0x000000, 0x000098, 0x009800, 0x009898, 0x980000, 0x980098, 0x804000, 0x989898, 0x101010,
 		0x1010ff, 0x10ff10, 0xe0ffff, 0xff1010, 0xff10f0, 0xffff10, 0xffffff,

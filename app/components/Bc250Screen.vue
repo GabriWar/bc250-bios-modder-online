@@ -140,7 +140,7 @@ const rule = "-".repeat(RIGHT - 2);
 .screen {
   position: relative;
   display: inline-block;
-  font-family: 'Cozette', 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: min(15px, calc((100vw - 28px) / 49));
   line-height: 1.3;
   max-width: 100%;

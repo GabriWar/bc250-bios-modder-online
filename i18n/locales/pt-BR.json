@@ -1,4 +1,982 @@
 {
+	"welcome": "Bem-vindo",
+	"asciiPage": {
+		"start": "iniciar",
+		"stop": "parar",
+		"reset": "resetar",
+		"rainOn": "chuva on",
+		"rainOff": "chuva off",
+		"bouncyOn": "bounce on",
+		"bouncyOff": "bounce off",
+		"brush": "pincel",
+		"speed": "speed"
+	},
+	"aiPage": {
+		"loading": "carregando mediapipe...",
+		"gesture": "gesto",
+		"confidence": "confiança",
+		"fingers": "dedos",
+		"changeColor": "mudar cor",
+		"showCard": "mostrar card",
+		"hideCard": "esconder card",
+		"clicks": "cliques",
+		"cardTitle": "hand tracking",
+		"cardDesc": "aponte o dedo indicador pra controlar o cursor. segure em cima de um botão pra clicar.",
+		"cameraOn": "câmera on",
+		"cameraOff": "câmera off",
+		"mirror": "espelhar",
+		"video": "vídeo",
+		"fullscreen": "tela cheia",
+		"joints": "juntas",
+		"bones": "ossos",
+		"cursor": "cursor",
+		"gestureBtn": "gesto",
+		"fingersBtn": "dedos",
+		"gestures": {
+			"None": "nenhum",
+			"Closed_Fist": "punho fechado",
+			"Open_Palm": "palma aberta",
+			"Pointing_Up": "apontando",
+			"Thumb_Down": "polegar baixo",
+			"Thumb_Up": "polegar cima",
+			"Victory": "vitória",
+			"ILoveYou": "te amo"
+		},
+		"errors": {
+			"camera": "acesso à câmera negado. permita o acesso.",
+			"mediapipe": "falha ao carregar mediapipe"
+		}
+	},
+	"loadingScreen": {
+		"boot": "boot",
+		"boot_queued": "tarefas de boot na fila",
+		"tasks_complete": "tarefas concluídas",
+		"launching": "abrindo portfólio..."
+	},
+	"pattern": {
+		"subtitle": "escolha seu background",
+		"speed": "velocidade",
+		"dither": "dither",
+		"invert": "inverter",
+		"color": "cor",
+		"fgColor": "cor do pattern",
+		"bgColor": "cor do fundo",
+		"apply": "definir como background",
+		"preview": "prévia",
+		"active": "ativo",
+		"reset": "resetar",
+		"vignette": "vinheta",
+		"randomColors": "cores aleatórias",
+		"randomPattern": "pattern aleatório"
+	},
+	"settings": {
+		"subtitle": "ajuste seu portfólio",
+		"hero": {
+			"title": "hero",
+			"subtitle": "escolha sua landing"
+		},
+		"bg": {
+			"title": "background",
+			"subtitle": "tint, velocidade, pattern",
+			"clickToConfirm": "clique em qualquer lugar pra travar · esc pra cancelar",
+			"enterToConfirm": "enter pra salvar como background",
+			"escToCancel": "esc pra cancelar",
+			"spaceToHide": "espaço pra esconder esse overlay"
+		}
+	},
+	"theme": {
+		"light": "Claro",
+		"dark": "Escuro",
+		"toggle": "Alternar tema"
+	},
+	"language": {
+		"select": "Selecionar idioma"
+	},
+	"common": {
+		"home": "Início",
+		"about": "Sobre",
+		"contact": "Contato",
+		"loading": "Carregando...",
+		"error": "Erro",
+		"success": "Sucesso",
+		"scroll": "ROLAR",
+		"backToTop": "Voltar ao topo",
+		"open": "abrir",
+		"close": "fechar",
+		"and": "e",
+		"nav": {
+			"home": "Início",
+			"ascii": "ASCII",
+			"ai": "IA",
+			"security": "Segurança",
+			"settings": "Ajustes"
+		}
+	},
+	"hero": {
+		"titles": [
+			"GabriWar",
+			"GABRIEL!",
+			"_GUERRA_",
+			"GUERRA!!",
+			"GABRIWAR",
+			"_GABRIEL",
+			"GUERRA_G",
+			"g4br13l_",
+			"GUERR4!!",
+			"{'@'}GABRIEL",
+			"Gabriel Duarte Guerra",
+			"gabriel.exe",
+			"gdg.xyz",
+			"gabriwar.xyz",
+			"feito por gdg",
+			"engenheiro reverso",
+			"engenheira de sistemas",
+			"garota low-level",
+			"garota que coda",
+			"detetive de binário",
+			"SEGFAULT",
+			"0xDEADBE",
+			"R00T_GDB",
+			"KERNEL!!",
+			"BUFFEROV",
+			"RING_0__",
+			"NULLPTR_",
+			"STACKPWN",
+			"0xC0FFEE",
+			"MALLOC()",
+			"/dev/MEM",
+			"SIGKILL_",
+			"PTRACE!!",
+			"OFFENSIV",
+			"EXPLOIT!",
+			"PWNED!!!",
+			"OVERFLOW",
+			"fork() bomb",
+			":(){'{ :|:& }'};:",
+			"/dev/null",
+			"/dev/urandom",
+			"/proc/cpuinfo",
+			"/etc/issue",
+			"/etc/passwd",
+			"ENOENT",
+			"EACCES",
+			"EINVAL",
+			"EBUSY",
+			"EAGAIN",
+			"IDA Pro",
+			"Ghidra wins",
+			"radare2",
+			"binary ninja",
+			"x86_64 gang",
+			"ARM64 vibes",
+			"RISC-V era",
+			"MIPS forever",
+			"0x90 sled",
+			"NOP slide",
+			"shellcode",
+			"ret2libc",
+			"ret2csu",
+			"rop chain",
+			"jop chain",
+			"use-after-free",
+			"double free",
+			"type confusion",
+			"heap spray",
+			"stack pivot",
+			"cadeia BYOVD",
+			"kernel pwn",
+			"ring 0",
+			"race window",
+			"TOCTOU",
+			"JWT none alg",
+			"XSS canary",
+			"CSRF token",
+			"side channel",
+			"spectre v2",
+			"row hammer",
+			"objdump -d",
+			"readelf -a",
+			"strings -n 8",
+			"hexdump -C",
+			"xxd | grep",
+			"uname -a",
+			"uname -r",
+			"Arch BTW",
+			"uso Arch sim",
+			"systemctl",
+			"journalctl -f",
+			"dmesg | tail",
+			"ps aux | grep",
+			"kill -9 -1",
+			"lsof -i",
+			"ss -tlnp",
+			"tcpdump -i any",
+			"strace -p",
+			"ltrace também",
+			"perf top",
+			"bpftrace",
+			"eBPF mágico",
+			"rg pattern",
+			"fzf > grep",
+			"neovim btw",
+			":wq!",
+			":q!",
+			":x",
+			"git push -f",
+			"git rebase -i",
+			"git bisect",
+			"git stash pop",
+			"git reflog",
+			"conflito de merge",
+			"force push em prod",
+			"detached HEAD",
+			"HEAD~1 ops",
+			"rm -rf /",
+			"rm -rf node_modules",
+			"sudo !!",
+			"sudo make me",
+			"make -j$(nproc)",
+			"panic!()",
+			"unwrap()",
+			"Result⟨(), Box⟩",
+			"// HACK",
+			"// TODO ",
+			"// FIXME",
+			"/* foi mal */",
+			"Hello, mundo",
+			"kubectl apply -f",
+			"kubectl get pods",
+			"kubectl logs -f",
+			"kubectl exec -it",
+			"kubectl drain node",
+			"kubectl rollout",
+			"k9s ftw",
+			"stern -l app",
+			"kubectx prod",
+			"terraform plan",
+			"terraform apply",
+			"tf destroy ☠",
+			"terragrunt",
+			"k3s server",
+			"k3s agent",
+			"helm upgrade",
+			"helm rollback",
+			"argocd sync",
+			"flux reconcile",
+			"ingress-nginx",
+			"cert-manager",
+			"vault read",
+			"consul kv",
+			"etcdctl member",
+			"containerd run",
+			"docker > podman",
+			"docker build .",
+			"docker compose up",
+			"buildkit cache",
+			"503 retry-after",
+			"429 rate limit",
+			"HPA escalando",
+			"VPA right-size",
+			"PDB violado",
+			"OOMKilled",
+			"CrashLoopBackOff",
+			"ImagePullBackOff",
+			"Pending pra sempre",
+			"Evicted",
+			"redis HSET",
+			"redis EXPIRE",
+			"PUBSUB chan",
+			"psql -c '\\dt'",
+			"EXPLAIN ANALYZE",
+			"BEGIN; ROLLBACK;",
+			"pgbench -c 100",
+			"WAL replay",
+			"vacuum full",
+			"Rust",
+			"Go",
+			"Python",
+			"TypeScript",
+			"Bun",
+			"Deno",
+			"C++23",
+			"C",
+			"Zig",
+			"OCaml",
+			"Haskell",
+			"Lua",
+			"Bash",
+			"fish shell",
+			"Common Lisp",
+			"React 19",
+			"Vue 3",
+			"Nuxt 4",
+			"Svelte 5",
+			"Astro 5",
+			"SolidJS",
+			"Vite",
+			"esbuild",
+			"swc",
+			"rolldown",
+			"tailwind",
+			"shadcn/ui",
+			"PostgreSQL",
+			"SQLite",
+			"Redis",
+			"ClickHouse",
+			"DuckDB",
+			"Kafka",
+			"NATS",
+			"pgvector",
+			"Qdrant",
+			"Milvus",
+			"loss = NaN",
+			"loss explodiu",
+			"fine-tuning",
+			"LoRA + QLoRA",
+			"attention!",
+			"embedding",
+			"prompt cache",
+			"transformer",
+			"vLLM voando",
+			"llama.cpp",
+			"Ollama local",
+			"CUDA OOM",
+			"TCP SYN",
+			"RST packet",
+			"MTU 1500",
+			"ICMP echo",
+			"DNS A rec",
+			"TLS 1.3",
+			"QUIC",
+			"rotas BGP",
+			"ARP poison",
+			"MAC spoof",
+			"OWASP top 10",
+			"ZAP ativo",
+			"nmap -sV",
+			"nuclei -t",
+			"trivy scan",
+			"semgrep run",
+			"burp suite",
+			"metasploit",
+			"deu bom",
+			"deu ruim",
+			"deploy na sexta",
+			"produção quebrou",
+			"BBS sysop",
+			"9600 baud",
+			"barulho do modem",
+			"IRC #linux",
+			"fortune | cowsay",
+			"uptime: 420d",
+			"MOTD aqui",
+			"404 self",
+			"418 bule",
+			"451 censurado",
+			"O(n log n)",
+			"O(1) lookup",
+			"NP-hard nope",
+			"halting",
+			"fita TM ftw",
+			"lambda calc",
+			"monad? nem",
+			"if (true)",
+			"while(1);",
+			"for(;;);",
+			"goto fail",
+			"use std::*;",
+			"import this",
+			"from x import *",
+			"DROP TABLE;",
+			"DELETE FROM users",
+			"UPDATE SET pwd"
+		],
+		"picker": {
+			"title": "escolha seu hero",
+			"subtitle": "clique em um pra travar",
+			"random": "aleatório",
+			"none": "sem hero",
+			"close": "fechar",
+			"names": {
+				"physics": "física 3d",
+				"scramble": "scramble",
+				"ascii": "ascii",
+				"pixel": "pixel"
+			},
+			"descs": {
+				"physics": "texto 3d arrastável",
+				"scramble": "título embaralha no hover",
+				"ascii": "mesh ascii com ondas",
+				"pixel": "pixel physics, clique pra explodir",
+				"random": "surpresa a cada boot",
+				"none": "só o pattern, sem hero"
+			}
+		},
+		"devControls": {
+			"title": "Controles de Dev",
+			"copy": "Copiar Valores",
+			"close": "Fechar"
+		}
+	},
+	"resume": {
+		"title": "Perfil",
+		"intro": "Engenheiro Full-Stack e de Segurança com atuação em plataformas empresariais, IoT industrial, integração de IA e pesquisa em segurança ofensiva. Entrego aplicações em produção (energia solar, SCADA, comunicação empresarial) e faço pesquisa de segurança contratada + divulgação coordenada em grandes plataformas SaaS. Engenharia reversa em firmware/hardware e análise de stacks modernos de anti-tamper (kernel, hypervisor, UEFI). Cursando Ciência da Computação.",
+		"experience": {
+			"title": "Experiência",
+			"items": [
+				{
+					"company": "Grupo Multiluz",
+					"position": "Engenheiro Full-Stack",
+					"period": "01/2025, presente · Ipatinga, BR",
+					"highlights": [
+						"Plataforma Empresarial Solar (MultiluzSolarWebCalculadora): React, Node.js, Socket.IO, Google Cloud (BigQuery, Secret Manager), arquitetura multi-banco (MSSQL/MySQL), assinaturas digitais, geração de documentos, agendamento.",
+						"Sistema SCADA Industrial (MTZ_View): React 19, TypeScript, PostgreSQL. Deploy em Raspberry Pi via Docker. Telemetria em tempo real Modbus TCP/IP e gerenciamento de alarmes.",
+						"Plataforma SaaS WhatsApp Cloud (wacraft-client): Angular 19, Rete.js (workflows visuais), ApexCharts.",
+						"PWA Bun + React 19 + Minio (gpml-pwa): arquitetura offline-first + Web Push.",
+						"Integração de IA: RAG em produção, hospedagem local de LLMs e deploy de modelos para uso empresarial."
+					]
+				},
+				{
+					"company": "SGS Canada",
+					"position": "Desenvolvedor Freelancer",
+					"period": "10/2021, presente · Remoto",
+					"highlights": [
+						"Migrei componentes C++ críticos em performance para Rust, ganhando segurança e eficiência.",
+						"Atuação em stacks low- e high-level (C, C++, Rust, Python) em time remoto de língua inglesa.",
+						"Automatizei processos de build, entrega e QA para aumentar confiabilidade."
+					]
+				}
+			]
+		},
+		"highlightProjects": {
+			"title": "Projetos de destaque",
+			"items": [
+				{
+					"name": "ida-f32",
+					"url": "https://github.com/GabriWar/ida-f32",
+					"desc": "Processor module para IDA Pro: ISA de microcode F32 CP/MEC dos command processors de GPUs AMD."
+				},
+				{
+					"name": "idaxport",
+					"url": "https://github.com/GabriWar/idaxport",
+					"desc": "Plugin de export IDA Pro para análise assistida por IA: funções decompiladas, xrefs, call graphs, vtables."
+				},
+				{
+					"name": "gammakay61-linux",
+					"url": "https://github.com/GabriWar/gammakay61-linux",
+					"desc": "RE do protocolo USB HID do teclado Gammakay61 (SK61L) + controlador RGB nativo para Linux."
+				},
+				{
+					"name": "tozo-control",
+					"url": "https://github.com/GabriWar/tozo-control",
+					"desc": "RE do protocolo BLE dos fones TOZO + aplicação Linux GTK4 (bateria, EQ, game mode)."
+				},
+				{
+					"name": "Pesquisa de segurança ofensiva",
+					"url": null,
+					"desc": "Divulgação coordenada de falhas graves em múltiplos produtos SaaS: auth/authz, isolamento multi-tenant, segurança web."
+				},
+				{
+					"name": "Anti-tamper / DRM comercial (privado)",
+					"url": null,
+					"desc": "RE de stack moderno anti-tamper: drivers kernel (BYOVD), UEFI bootkit, hypervisor bare-metal, API hooking. 1.600+ funções decompiladas."
+				}
+			]
+		},
+		"fullstack": {
+			"title": "Full-Stack",
+			"description": "Arquitetura ponta a ponta com isolamento multi-tenant desde o dia zero, RBAC hierárquico aplicado em API, query e linha via Row-Level Security do PostgreSQL, e observabilidade full-stack via OpenTelemetry, Prometheus, Grafana e Loki. Backends em Node.js e Bun com TypeScript estrito, Go com Fiber ou Chi para APIs compiladas, C++ e Rust quando latência e throughput importam. Dados em PostgreSQL com pgvector para busca semântica, Redis Cluster para cache e filas, ClickHouse para cargas analíticas, NATS ou Kafka para event streaming.",
+			"detailed": "Frontends em React 19, Vue 3, Nuxt ou SvelteKit com tipagem estrita, SSR / SSG / ISR via Vite ou Turbopack, design systems baseados em Tailwind e shadcn/ui. Containerização com Docker + BuildKit, orquestração em Kubernetes ou Nomad, infraestrutura como código via Terraform e Pulumi, GitOps com Argo CD ou Flux. CI/CD em GitHub Actions e GitLab Pipelines, entrega de borda via Cloudflare e Fastly. Contratos OpenAPI / AsyncAPI, Swagger UI, contract tests via Pact, types schema-driven ponta a ponta."
+		},
+		"lowlevel": {
+			"title": "Baixo Nível & Engenharia Reversa",
+			"description": "Engenharia de sistemas em C23, C++ moderno (C++20/23) e Rust, com domínio de modelos de memória, primitivas de concorrência e fronteiras de ABI. Engenharia reversa de binários x86, x86_64, ARM e ARM64; análise de firmware e microcódigo (AMD F32, RS64); desenvolvimento de módulos de processador e loaders para IDA Pro; instrumentação dinâmica com Frida e DynamoRIO; fuzzing guiado por cobertura com AFL++, libFuzzer e honggfuzz; engenharia reversa de protocolos e isolamento de vulnerabilidades por análise diferencial.",
+			"detailed": "Ferramental: IDA Pro, Ghidra, Binary Ninja, radare2 / rizin, x64dbg, GDB / LLDB com pwndbg e GEF, QEMU + Unicorn para emulação cross-arch, Wireshark e tshark, Frida e DynamoRIO para hooking, BinDiff e Diaphora para diff de binários, angr e Triton para execução simbólica. Internals do kernel Linux (eBPF, KASAN, KCSAN), virtualização (KVM, Xen) e instrumentação em nível de hypervisor."
+		},
+		"ai": {
+			"title": "Inteligência Artificial",
+			"description": "Infraestrutura completa de IA aplicada: fine-tuning de LLMs com LoRA, QLoRA, DoRA e SFT full-parameter via Hugging Face TRL, Axolotl e Unsloth em A100 / H100 / MI300X. Pipelines RAG com embeddings densos (sentence-transformers, BGE-M3, E5-Mistral, Voyage), retrieval híbrido sparse-dense (BM25 + Reciprocal Rank Fusion) e rerankers cross-encoder (bge-reranker-v2, Cohere Rerank). Bancos vetoriais em pgvector, Qdrant, Milvus e Weaviate. Orquestração de inferência com vLLM, SGLang, TensorRT-LLM, llama.cpp e Ollama; geração estruturada via Outlines, XGrammar e constraints de JSON Schema.",
+			"detailed": "Agentes multi-step com tool use e function calling (OpenAI function calling, Anthropic tool use, servidores MCP), pipelines de avaliação via Ragas, DeepEval e TruLens (faithfulness, context recall, answer relevance) e observabilidade via LangSmith, Langfuse e Helicone. Deploys de produção misturando modelos proprietários (OpenAI, Anthropic, Google, Groq, Cerebras) e open-source (Llama 3, Qwen 2.5, Mistral, DeepSeek) com prompt caching, semantic caching, reuso de KV-cache, speculative decoding e observabilidade de tokens por tenant."
+		},
+		"linux": {
+			"title": "Linux & Infraestrutura",
+			"description": "Administração e engenharia profundas em Arch, Debian, Ubuntu, NixOS e Kali. Escrita de units de systemd, isolamento de recursos via cgroup v2, sandboxing por namespace e seccomp-bpf. Tuning de performance com perf, eBPF (bcc, bpftrace, libbpf), flame graphs e BPF Compiler Collection. Resposta a incidentes em produção com logging estruturado via journald, Loki e Vector, e tracing distribuído via OpenTelemetry. Patches customizados de kernel, módulos out-of-tree e trabalho com drivers DRM para hardware sem suporte (microcódigo AMD F32, BC-250 APU)."
+		},
+		"security": {
+			"title": "Segurança & Conformidade",
+			"description": "Cifragem em repouso e em trânsito: AES-256-GCM em coluna nas credenciais e dados sensíveis via libsodium com envelope encryption por AWS KMS ou HashiCorp Vault; TLS 1.3 fim-a-fim com HSTS preload, OCSP stapling e cipher suites modernas. Argon2id para hashing de senhas, segredos em variáveis de ambiente ou stores com KMS, nunca no banco. MFA + RBAC obrigatórios com princípio do menor privilégio: TOTP (RFC 6238) e FIDO2 / WebAuthn (YubiKey) para owner, admin e developer; OAuth 2.1 + OIDC com PKCE, JWTs assinados (EdDSA / ES256) e enforcement centralizado de política via OPA ou Casbin, com revisões internas de acesso.",
+			"detailed": "Aderente a GDPR / LGPD / CPRA: aviso de privacidade público, endpoints de acesso / exportação / exclusão de dados do titular, retenção mínima por tipo de dado, deauth provider em até 24h, DPIA para processamento de alto risco. Varreduras contínuas: OWASP ZAP + Nuclei (DAST), Semgrep + CodeQL (SAST), Trivy + Grype com SBOM CycloneDX / SPDX, gitleaks + TruffleHog para detecção de segredos, trimestrais e a cada release material. Dependabot + Renovate para SCA. Artefatos assinados via Sigstore / cosign com hardening de supply chain inspirado em SLSA. SLAs de vulnerabilidades: crítico 7 dias, alto 14 dias, médio 30 dias. Alinhado com NIST SP 800-53 e CIS benchmarks."
+		},
+		"devops": {
+			"title": "DevOps & Plataforma",
+			"description": "Infraestrutura como código com Terraform para tudo que dá pra provisionar (clusters, DNS, object storage, IAM, CDN, backend de segredos) versionado e reconciliado via CI, nada de ClickOps. Orquestração em Kubernetes quando o workload pede, k3s pra frotas menores rodando em VPS no Hetzner ou DigitalOcean. Helm pra entregar apps internos como charts com values por ambiente, ArgoCD reconciliando git → cluster pra que o manifest seja a fonte da verdade, não o que um humano fez kubectl-apply às 3 da manhã.",
+			"detailed": "Edge com Nginx ou Traefik: terminação TLS, gzip/brotli, coalescing de requests, rate limit, mTLS pros upstreams; Cloudflare na frente quando proteção DDoS importa. Peças com estado self-hospedadas quando controle importa: Redis (primary + replica com failover via sentinel, RDB + AOF), PostgreSQL (replicação por streaming, PITR via WAL archive, pgBouncer), Minio pra blob storage S3-compatível. Observabilidade via Prometheus + Grafana + Loki + OpenTelemetry, um único trace ID do browser → nginx → pod → redis → postgres. CI/CD via GitHub Actions e GitLab CI: builds Docker multi-stage, scans Trivy + Grype bloqueando prod, artefatos assinados com cosign, rollback automático em readiness probe falhando. Segredos no Vault ou em env injection via KMS, nunca no repo."
+		},
+		"education": {
+			"title": "Formação",
+			"description": "Ciência da Computação e Engenharia da Computação em andamento. Estudo contínuo de arquitetura de sistemas, compiladores, teoria de linguagens e pesquisa aplicada em IA. Idiomas: Português (nativo), Inglês (fluente), Espanhol (proficiente), Italiano (básico), Alemão e Russo (em aprendizado)."
+		},
+		"projects": {
+			"title": "Projetos & Stack"
+		},
+		"skills": {
+			"languages": "Linguagens",
+			"backend": "Backend & Dados",
+			"frontend": "Frontend",
+			"ai": "IA / ML",
+			"security": "Reverse Engineering",
+			"embedded": "Embedded & Kernel",
+			"cloud": "Cloud & Infra",
+			"devops": "DevOps",
+			"langs": "Idiomas",
+			"content": {
+				"languages": "C++, C, Rust, TypeScript, Python, Go, Assembly (x86/x86_64/ARM)",
+				"backend": "Node.js, Bun, REST/gRPC, WebSockets, PostgreSQL + pgvector, Redis, MySQL, SQLite",
+				"frontend": "React, Nuxt, Vue, SvelteKit, Vite, design systems customizados, SSR/SSG",
+				"ai": "LLMs (fine-tuning, LoRA/QLoRA), RAG, embeddings (sentence-transformers, BGE, E5), pgvector / Qdrant / Milvus, vLLM, llama.cpp, Ollama, agentes, avaliação de pipelines",
+				"security": "IDA Pro (+ módulos de processador), Ghidra, radare2, x64dbg, GDB, Frida, Wireshark",
+				"embedded": "Firmware em microcontroladores e SoC, USB HID, BLE, Modbus TCP/IP, kernel Linux internals, QEMU",
+				"cloud": "Docker, orquestração de containers, GCP, Nginx, Cloudflare Tunnel, Vercel, DigitalOcean, self-hosting",
+				"devops": "Git, CI/CD (GitHub Actions, GitLab CI), systemd, observabilidade (Prometheus, Grafana), automação de infraestrutura",
+				"langs": "Português (nativo), Inglês (fluente), Espanhol (proficiente), Italiano (básico), Alemão e Russo (em aprendizado)"
+			}
+		}
+	},
+	"projectsList": {
+		"ui": {
+			"size": "tamanho",
+			"rows": "linhas",
+			"click_open": "clique para abrir",
+			"offset": "offset",
+			"eof": "fim do arquivo"
+		},
+		"blog": {
+			"title": "Blog",
+			"description": "Anotações, writeups e desabafos. Quase tudo sobre engenharia reversa, Linux, e o que mais tá derretendo meu cérebro essa semana."
+		},
+		"security": {
+			"title": "Segurança",
+			"description": "Segurança ofensiva, divulgação responsável e arquitetura de sistemas seguros."
+		},
+		"reversing": {
+			"title": "Engenharia Reversa",
+			"description": "Disassembly, módulos de processador, unpacking de firmware e instrumentação em runtime."
+		},
+		"devops": {
+			"title": "DevOps & Plataforma",
+			"description": "Terraform, Kubernetes, Redis, observabilidade: infraestrutura como código do cluster pra baixo."
+		},
+		"ai": {
+			"title": "IA",
+			"description": "Soluções avançadas de Inteligência Artificial focadas em modelos preditivos e análise de dados.",
+			"bodyInspector": {
+				"mock": "MOCK",
+				"selection": "seleção"
+			},
+			"trainingMonitor": {
+				"metrics": {
+					"loss": "loss",
+					"acc": "acc",
+					"ppl": "ppl",
+					"lr": "lr",
+					"batch": "batch",
+					"accuracy": "acurácia",
+					"emb": "emb"
+				},
+				"idle": "ocioso: clique ▸ treinar & gerar no painel acima"
+			},
+			"diffusion": {
+				"sub": "LM de difusão real · treinada no browser",
+				"stepLabel": "passo",
+				"params": "params",
+				"intro": "um modelo de linguagem por difusão de verdade, treinado do zero no seu browser com poesia de domínio público (blake · dickinson · stevenson · rossetti)",
+				"warn": "atenção, treina uma rede real no seu browser, então a página vai travar por alguns segundos",
+				"start": "treinar & gerar",
+				"loading": "carregando corpus de poesia…",
+				"training": "treinando a LM do zero…",
+				"corpus": "palavras no corpus",
+				"loss": "loss",
+				"play": "tocar",
+				"pause": "pausar",
+				"step": "passo",
+				"generate": "re-gerar",
+				"temp": "temp",
+				"tokens": "tokens",
+				"steps": "passos de denoise",
+				"gentime": "tempo/passo",
+				"sweet": "ideal",
+				"tSteps": "passos de treino",
+				"lrate": "taxa lr",
+				"hidden": "oculta",
+				"embdim": "dim embed",
+				"ctx": "contexto ±",
+				"retrain": "re-treinar",
+				"prompt": "prompt",
+				"promptPlaceholder": "dê palavras pra ele tecer ao redor…",
+				"promptHint": "palavras no vocab viram âncoras fixas: o modelo preenche ao redor",
+				"oov": "fora do vocab",
+				"entropy": "entropia",
+				"committed": "fixados",
+				"denoising": "denoising",
+				"converged": "convergiu",
+				"dist": "p(token) · top-k do modelo",
+				"pending": "mascarado",
+				"locked": "fixado",
+				"hint": "probabilidades reais do modelo: passe o mouse num token durante o denoise"
+			},
+			"oracle": {
+				"ui": {
+					"temp": "TEMP",
+					"live": "AO VIVO",
+					"mock": "MOCK",
+					"thinking": "pensando",
+					"placeholder": "pergunte qualquer coisa ao jeff...",
+					"ask": "perguntar",
+					"stop": "parar",
+					"reset": "resetar",
+					"compact": "compactar",
+					"hint": "peça pro jeff fazer seu dever de casa, ele sabe de (quase) tudo",
+					"log_title": "jeff.log",
+					"scope": "mundo",
+					"overdrive": "OVERDRIVE"
+				},
+				"tiers": {
+					"calm": [
+						"muito provável",
+						"com certeza",
+						"sim",
+						"não",
+						"talvez",
+						"boas perspectivas",
+						"tudo indica que sim",
+						"decididamente sim",
+						"pode contar com isso",
+						"ao meu ver, sim",
+						"não posso prever agora",
+						"resposta vaga · tente de novo",
+						"pergunte mais tarde",
+						"não conte com isso",
+						"perspectivas nada boas",
+						"concentre-se e tente de novo"
+					],
+					"normal": [
+						"manda bala (ship it)",
+						"LGTM",
+						"pode dar merge",
+						"confiança 0.97",
+						"8 de 10 cabeças de atenção concordam",
+						"o gradiente aponta pra lá",
+						"testes unitários provavelmente passariam",
+						"sei lá bicho",
+						"erro 429 · rate limited",
+						"alucinando · não confie nisso",
+						"precisa de uma segunda opinião do stackoverflow",
+						"o linter não tem opinião formada",
+						"compila na minha máquina",
+						"funciona em staging",
+						"rejeitado pelo discriminador",
+						"build falhou · veja o log",
+						"revisor pediu mudanças",
+						"NaN",
+						"null pointer · tente de novo",
+						"deadlocked",
+						"500 erro interno do servidor",
+						"depreciado desde 2019"
+					],
+					"spicy": [
+						"sim, com certeza",
+						"nem ferrando",
+						"nem a pau",
+						"100% · funciona na minha máquina",
+						"problema de skill",
+						"rm -rf / no seu plano",
+						"roda em dev, quebra em prod",
+						"só reinicia, confia",
+						"culpa o estagiário",
+						"o chatgpt disse que sim, então sim",
+						"procura no google",
+						"vai tocar grama",
+						"ratio + L + você caiu",
+						"segfault · core dumped",
+						"a função de loss discorda (gritando)",
+						"energia de personagem principal",
+						"minhas fontes (kaggle) dizem que não",
+						"chora mais + recompila"
+					],
+					"unhinged": [
+						"p***a sim",
+						"p***a nenhuma",
+						"c****o sim, mano",
+						"absolutamente f***-se sim",
+						"pode crer",
+						"sim, caramba",
+						"nem f*****o",
+						"de jeito nenhum",
+						"que p***a você tá perguntando?",
+						"besteira, mas ok, sim",
+						"com toda certeza",
+						"meu ovo, com certeza",
+						"vaza e tenta de novo",
+						"come m***a e recompila",
+						"procura e vai achar",
+						"você tá falando sério?",
+						"pqp hein (com carinho)",
+						"f***-se, vai assim mesmo",
+						"na moral",
+						"se ferrou",
+						"isso aí mesmo",
+						"bruh... sim",
+						"vai ver o sol",
+						"foi atrás e achou",
+						"não · e f***-se seu prompt",
+						"por que diabos não?",
+						"com certeza, p****a"
+					]
+				}
+			}
+		},
+		"crm": {
+			"title": "CRM",
+			"description": "Sistema de Gestão de Relacionamento adaptado pro que o negócio precisar.",
+			"funnel": {
+				"label": "funil de conversão · semente aleatória por load",
+				"ui": {
+					"stages": "etapas",
+					"live": "AO VIVO",
+					"paused": "PAUSADO",
+					"reroll": "sortear",
+					"pause": "pausar",
+					"resume": "continuar",
+					"paid": "pagou",
+					"churned": "cancelou",
+					"net_new": "saldo novo",
+					"top_paid": "topo → pago"
+				},
+				"stages": {
+					"top": [
+						"gente aleatória",
+						"cliques acidentais",
+						"bots disfarçados",
+						"link errado num tweet",
+						"curiosos de plantão",
+						"só de passagem",
+						"minha mãe (eu que mandei)",
+						"olhando a vitrine"
+					],
+					"aware": [
+						"leu o FAQ uma vez",
+						"leu um post do blog",
+						"abriu os preços",
+						"stalkeou o changelog",
+						"tirou print da demo",
+						"perguntou pro amiguinho",
+						"botou num Google Doc"
+					],
+					"engaged": [
+						"se cadastrou (mentiu)",
+						"email temporário",
+						"marcou a demo",
+						"apareceu na demo",
+						"fez 3 perguntas de pré-venda",
+						"mandou DM pro founder",
+						"entrou no Discord"
+					],
+					"negotiate": [
+						"deu ghost na demo",
+						"pediu desconto",
+						"pediu \"feature enterprise\"",
+						"quer SSO customizado",
+						"precisa de jurídico",
+						"disse \"vou ver com o time\"",
+						"em piloto eterno"
+					],
+					"paid": [
+						"cliente pagante",
+						"contrato anual",
+						"assinou o contrato (MSA)"
+					],
+					"dead": [
+						"cancelou, culpa nossa",
+						"contestou a fatura",
+						"sumiu → reembolso",
+						"foi pro concorrente",
+						"foi comprado, sumiu"
+					]
+				}
+			},
+			"kpi": {
+				"ui": {
+					"live": "AO VIVO",
+					"paused": "PAUSADO",
+					"pause": "pausar",
+					"resume": "continuar",
+					"now": "agora"
+				},
+				"labels": {
+					"mrr": "MRR",
+					"conv": "CONVERSÃO",
+					"p95": "API P95"
+				}
+			}
+		},
+		"supervisorio": {
+			"title": "SCADA & TELEMETRIA",
+			"description": "Sistemas supervisórios industriais com telemetria em tempo real, comunicação com CLPs e dashboards ao vivo.",
+			"chaos": "caos",
+			"legend": "clique nas válvulas ◆ e bombas ◐ pra alternar",
+			"alarmLog": {
+				"ack_all": "ack tudo",
+				"empty": "nenhum alarme ativo",
+				"headers": {
+					"time": "hora",
+					"sev": "sev",
+					"tag": "tag",
+					"message": "mensagem",
+					"value": "valor",
+					"ack": "ack"
+				}
+			}
+		},
+		"pwa": {
+			"title": "PWA & MENSAGENS",
+			"description": "Apps web instaláveis, offline-first, com notificações push e integração com WhatsApp Cloud API.",
+			"clear_all": "limpar tudo",
+			"syncWorker": {
+				"headers": {
+					"worker": "worker",
+					"thread": "thread",
+					"pending": "pendente",
+					"processed": "processado",
+					"failed": "falhou"
+				},
+				"ui": {
+					"event_log": "log de eventos",
+					"pending_queue": "fila pendente · drena a cada 450ms",
+					"queue_empty": "fila vazia",
+					"no_events": "sem eventos",
+					"more_queued": "a mais na fila"
+				}
+			},
+			"pushSender": {
+				"ui": {
+					"tag": "tag",
+					"title": "título",
+					"body": "corpo",
+					"presets": "presets",
+					"send_push": "enviar push",
+					"burst": "rajada",
+					"click_hint": "clique = envia · botão direito = carrega no form"
+				}
+			}
+		},
+		"linux": {
+			"title": "LINUX",
+			"description": "Distros Linux personalizadas e ferramentas de automação com shell scripting.",
+			"bios": {
+				"title": "Configuração Aptio, Gabri Megatrends",
+				"help": "Ajuda",
+				"select": "Selecionar"
+			},
+			"boot": {
+				"os": "GabriOS 0.1 (edição pixel) · tty1",
+				"password": "Senha:",
+				"login": "Último login: faz tempo · entrando na sessão..."
+			},
+			"bsod": {
+				"info": "Para mais informações sobre este problema e possíveis correções,",
+				"support": "Se você ligar pro suporte, passe essas informações:",
+				"stop_code": "Código de parada:",
+				"failed": "O que falhou:",
+				"message": "Seu GabriOS encontrou um problema e precisa reiniciar. Estamos só coletando algumas informações do erro, e aí vamos reiniciar pra você",
+				"complete": "completo",
+				"reboot_hint": "clique em qualquer lugar pra reiniciar"
+			},
+			"fileManager": {
+				"up": "acima",
+				"home": "início",
+				"empty": "pasta vazia",
+				"items": "itens"
+			},
+			"paint": {
+				"undo": "desfazer",
+				"clear": "limpar",
+				"fill": "preencher",
+				"random": "aleatório",
+				"rmbErase": "botão direito = apagar"
+			},
+			"editor": {
+				"save": "salvar",
+				"run": "rodar",
+				"lines": "linhas",
+				"chars": "chars",
+				"notFound": "arquivo não encontrado"
+			},
+			"window": {
+				"minimize": "minimizar",
+				"maximize": "maximizar",
+				"close": "fechar",
+				"cannot_close": "não dá pra fechar enquanto maximizado"
+			},
+			"desktop": {
+				"av": {
+					"title": "GabriOS Defender: Aviso de Anti-Vírus",
+					"file": "Arquivo:",
+					"publisher": "Editor:",
+					"unknown": "Desconhecido",
+					"signature": "Assinatura:",
+					"none": "Nenhuma · binário não assinado",
+					"threats": "Ameaças detectadas:",
+					"risk": "Nível de risco:",
+					"extreme": "EXTREMO"
+				},
+				"shutdown": "Desligar",
+				"tux_says": "TUX DIZ",
+				"click_cycle": "clique pra alternar",
+				"tux_messages": [
+					"você tá rodando um linux falso. o real tá em kernel.org",
+					"psst, dá uma olhada em /home/gabriwar/projects",
+					"tenta `cat ~/linux.md` no terminal",
+					"sabia que o tux é um pinguim porque o linus foi bicado por um num aquário?",
+					"NÃO clica no virus.exe. sério. (clica pfvr)",
+					"sudo não funciona aqui. você não tá nos sudoers",
+					"pro tip: arraste os ícones. clique no vazio pra selecionar vários",
+					"kernel 6.66.0, o número é coincidência (mentira)"
+				]
+			},
+			"settings": {
+				"tabs": {
+					"display": "Tela",
+					"sound": "Som",
+					"network": "Rede",
+					"about": "Sobre"
+				},
+				"wallpaper": "Papel de Parede",
+				"theme": "Tema",
+				"effects": "Efeitos",
+				"scanlines": "scanlines de CRT",
+				"flicker": "tremulação aleatória",
+				"beeps": "Bips do sistema",
+				"bootBeep": "bip de boot",
+				"clickBeep": "bip de tecla",
+				"volume": "Volume Geral",
+				"wifi": "WiFi",
+				"interface": "Interface",
+				"os_info": "GabriOS 0.1 (edição pixel)",
+				"kernel": "Kernel 6.66.0-gabriwar",
+				"built_with": "Feito com Nuxt, Vue e puro ódio",
+				"about_note": "esse os é um brinquedo. o trabalho de linux de verdade tá no meu github, chega lá pelo app Arquivos ou pelo portfólio."
+			},
+			"android": {
+				"tip": "segure shutdown · toque num app",
+				"shutdown": "desligar",
+				"recentApps": "apps recentes",
+				"noRecentApps": "sem apps recentes",
+				"appRunning": "app · rodando",
+				"secureBoot": "VIOLAÇÃO DE SECURE BOOT",
+				"virusBlocked": "virus.exe bloqueado"
+			}
+		}
+	},
 	"bc250": {
 		"title": "bc250 bios recolour",
 		"intro": [
@@ -61,6 +1039,11 @@
 		"logoFill": "preencher o canvas (corta o que sobra)",
 		"logoNew": "nova",
 		"logoScreen": "como fica numa tela 1080p",
-		"failed": "falhou:"
+		"failed": "falhou:",
+		"compare": "[ ver o original ]",
+		"reviewHint": "clique em 'ver o original' pra comparar antes de confirmar",
+		"contrastAck": "conferi o contraste clicando nas imagens acima, e todas as telas continuam legiveis",
+		"blocked": "marque as duas caixas pra liberar o download",
+		"compareBack": "[ voltar pra sua ]"
 	}
 }

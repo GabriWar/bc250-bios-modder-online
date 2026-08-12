@@ -35,7 +35,7 @@ const lines: { text: string; idx: number }[] = [
 
 <style scoped>
 .console {
-  font-family: 'Cozette', 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: min(15px, calc((100vw - 28px) / 49));
   line-height: 1.3;
   padding: 6px 8px;

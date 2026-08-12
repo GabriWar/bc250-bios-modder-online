@@ -1,4 +1,982 @@
 {
+	"welcome": "Welcome",
+	"asciiPage": {
+		"start": "start",
+		"stop": "stop",
+		"reset": "reset",
+		"rainOn": "rain on",
+		"rainOff": "rain off",
+		"bouncyOn": "bouncy on",
+		"bouncyOff": "bouncy off",
+		"brush": "brush",
+		"speed": "speed"
+	},
+	"aiPage": {
+		"loading": "loading mediapipe...",
+		"gesture": "gesture",
+		"confidence": "confidence",
+		"fingers": "fingers",
+		"changeColor": "change color",
+		"showCard": "show card",
+		"hideCard": "hide card",
+		"clicks": "clicks",
+		"cardTitle": "hand tracking",
+		"cardDesc": "point your index finger to control the cursor. hold it over a button to click.",
+		"cameraOn": "camera on",
+		"cameraOff": "camera off",
+		"mirror": "mirror",
+		"video": "video",
+		"fullscreen": "fullscreen",
+		"joints": "joints",
+		"bones": "bones",
+		"cursor": "cursor",
+		"gestureBtn": "gesture",
+		"fingersBtn": "fingers",
+		"gestures": {
+			"None": "none",
+			"Closed_Fist": "closed fist",
+			"Open_Palm": "open palm",
+			"Pointing_Up": "pointing up",
+			"Thumb_Down": "thumb down",
+			"Thumb_Up": "thumb up",
+			"Victory": "victory",
+			"ILoveYou": "i love you"
+		},
+		"errors": {
+			"camera": "camera access denied. allow camera permissions.",
+			"mediapipe": "failed to load mediapipe"
+		}
+	},
+	"loadingScreen": {
+		"boot": "boot",
+		"boot_queued": "boot tasks queued",
+		"tasks_complete": "tasks complete",
+		"launching": "launching portfolio..."
+	},
+	"pattern": {
+		"subtitle": "pick your background",
+		"speed": "speed",
+		"dither": "dither",
+		"invert": "invert",
+		"color": "color",
+		"fgColor": "pattern color",
+		"bgColor": "bg color",
+		"apply": "set as background",
+		"preview": "preview",
+		"active": "active",
+		"reset": "reset",
+		"vignette": "vignette",
+		"randomColors": "random colors",
+		"randomPattern": "random pattern"
+	},
+	"settings": {
+		"subtitle": "tune your portfolio",
+		"hero": {
+			"title": "hero",
+			"subtitle": "pick your landing variant"
+		},
+		"bg": {
+			"title": "background",
+			"subtitle": "tint, speed, pattern",
+			"clickToConfirm": "click anywhere to lock this in · esc to cancel",
+			"enterToConfirm": "enter to save as background",
+			"escToCancel": "esc to cancel",
+			"spaceToHide": "space to hide this overlay"
+		}
+	},
+	"theme": {
+		"light": "Light",
+		"dark": "Dark",
+		"toggle": "Toggle theme"
+	},
+	"language": {
+		"select": "Select language"
+	},
+	"common": {
+		"home": "Home",
+		"about": "About",
+		"contact": "Contact",
+		"loading": "Loading...",
+		"error": "Error",
+		"success": "Success",
+		"scroll": "SCROLL",
+		"backToTop": "Back to top",
+		"open": "open",
+		"close": "close",
+		"and": "and",
+		"nav": {
+			"home": "Home",
+			"ascii": "ASCII",
+			"ai": "AI",
+			"security": "Security",
+			"settings": "Settings"
+		}
+	},
+	"hero": {
+		"titles": [
+			"GabriWar",
+			"GABRIEL!",
+			"_GUERRA_",
+			"GUERRA!!",
+			"GABRIWAR",
+			"_GABRIEL",
+			"GUERRA_G",
+			"g4br13l_",
+			"GUERR4!!",
+			"{'@'}GABRIEL",
+			"Gabriel Duarte Guerra",
+			"gabriel.exe",
+			"gdg.xyz",
+			"gabriwar.xyz",
+			"made by gdg",
+			"reverse engineer",
+			"systems engineer",
+			"low-level girl",
+			"girl that codes",
+			"binary detective",
+			"SEGFAULT",
+			"0xDEADBE",
+			"R00T_GDB",
+			"KERNEL!!",
+			"BUFFEROV",
+			"RING_0__",
+			"NULLPTR_",
+			"STACKPWN",
+			"0xC0FFEE",
+			"MALLOC()",
+			"/dev/MEM",
+			"SIGKILL_",
+			"PTRACE!!",
+			"OFFENSIV",
+			"EXPLOIT!",
+			"PWNED!!!",
+			"OVERFLOW",
+			"fork() bomb",
+			":(){'{ :|:& }'};:",
+			"/dev/null",
+			"/dev/urandom",
+			"/proc/cpuinfo",
+			"/etc/issue",
+			"/etc/passwd",
+			"ENOENT",
+			"EACCES",
+			"EINVAL",
+			"EBUSY",
+			"EAGAIN",
+			"IDA Pro",
+			"Ghidra wins",
+			"radare2",
+			"binary ninja",
+			"x86_64 gang",
+			"ARM64 vibes",
+			"RISC-V era",
+			"MIPS forever",
+			"0x90 sled",
+			"NOP slide",
+			"shellcode",
+			"ret2libc",
+			"ret2csu",
+			"rop chain",
+			"jop chain",
+			"use-after-free",
+			"double free",
+			"type confusion",
+			"heap spray",
+			"stack pivot",
+			"BYOVD chain",
+			"kernel pwn",
+			"ring 0",
+			"race window",
+			"TOCTOU",
+			"JWT none alg",
+			"XSS canary",
+			"CSRF token",
+			"side channel",
+			"spectre v2",
+			"row hammer",
+			"objdump -d",
+			"readelf -a",
+			"strings -n 8",
+			"hexdump -C",
+			"xxd | grep",
+			"uname -a",
+			"uname -r",
+			"Arch BTW",
+			"I use Arch",
+			"systemctl",
+			"journalctl -f",
+			"dmesg | tail",
+			"ps aux | grep",
+			"kill -9 -1",
+			"lsof -i",
+			"ss -tlnp",
+			"tcpdump -i any",
+			"strace -p",
+			"ltrace too",
+			"perf top",
+			"bpftrace",
+			"eBPF magic",
+			"rg pattern",
+			"fzf > grep",
+			"neovim btw",
+			":wq!",
+			":q!",
+			":x",
+			"git push -f",
+			"git rebase -i",
+			"git bisect",
+			"git stash pop",
+			"git reflog",
+			"merge conflict",
+			"force push prod",
+			"detached HEAD",
+			"HEAD~1 oops",
+			"rm -rf /",
+			"rm -rf node_modules",
+			"sudo !!",
+			"sudo make me",
+			"make -j$(nproc)",
+			"panic!()",
+			"unwrap()",
+			"Result⟨(), Box⟩",
+			"// HACK",
+			"// TODO ",
+			"// FIXME",
+			"/* sorry */",
+			"Hello, world",
+			"kubectl apply -f",
+			"kubectl get pods",
+			"kubectl logs -f",
+			"kubectl exec -it",
+			"kubectl drain node",
+			"kubectl rollout",
+			"k9s ftw",
+			"stern -l app",
+			"kubectx prod",
+			"terraform plan",
+			"terraform apply",
+			"tf destroy ☠",
+			"terragrunt",
+			"k3s server",
+			"k3s agent",
+			"helm upgrade",
+			"helm rollback",
+			"argocd sync",
+			"flux reconcile",
+			"ingress-nginx",
+			"cert-manager",
+			"vault read",
+			"consul kv",
+			"etcdctl member",
+			"containerd run",
+			"docker > podman",
+			"docker build .",
+			"docker compose up",
+			"buildkit cache",
+			"503 retry-after",
+			"429 rate limit",
+			"HPA scaling up",
+			"VPA right-size",
+			"PDB violated",
+			"OOMKilled",
+			"CrashLoopBackOff",
+			"ImagePullBackOff",
+			"Pending forever",
+			"Evicted",
+			"redis HSET",
+			"redis EXPIRE",
+			"PUBSUB chan",
+			"psql -c '\\dt'",
+			"EXPLAIN ANALYZE",
+			"BEGIN; ROLLBACK;",
+			"pgbench -c 100",
+			"WAL replay",
+			"vacuum full",
+			"Rust",
+			"Go",
+			"Python",
+			"TypeScript",
+			"Bun",
+			"Deno",
+			"C++23",
+			"C",
+			"Zig",
+			"OCaml",
+			"Haskell",
+			"Lua",
+			"Bash",
+			"fish shell",
+			"Common Lisp",
+			"React 19",
+			"Vue 3",
+			"Nuxt 4",
+			"Svelte 5",
+			"Astro 5",
+			"SolidJS",
+			"Vite",
+			"esbuild",
+			"swc",
+			"rolldown",
+			"tailwind",
+			"shadcn/ui",
+			"PostgreSQL",
+			"SQLite",
+			"Redis",
+			"ClickHouse",
+			"DuckDB",
+			"Kafka",
+			"NATS",
+			"pgvector",
+			"Qdrant",
+			"Milvus",
+			"loss = NaN",
+			"loss exploded",
+			"fine-tuning",
+			"LoRA + QLoRA",
+			"attention!",
+			"embedding",
+			"prompt cache",
+			"transformer",
+			"vLLM blazing",
+			"llama.cpp",
+			"Ollama local",
+			"CUDA OOM",
+			"TCP SYN",
+			"RST packet",
+			"MTU 1500",
+			"ICMP echo",
+			"DNS A rec",
+			"TLS 1.3",
+			"QUIC",
+			"BGP routes",
+			"ARP poison",
+			"MAC spoof",
+			"OWASP top 10",
+			"ZAP active",
+			"nmap -sV",
+			"nuclei -t",
+			"trivy scan",
+			"semgrep run",
+			"burp suite",
+			"metasploit",
+			"no cap",
+			"ngl peak",
+			"main char",
+			"side quest",
+			"BBS sysop",
+			"9600 baud",
+			"modem screech",
+			"IRC #linux",
+			"fortune | cowsay",
+			"uptime: 420d",
+			"MOTD here",
+			"404 self",
+			"418 teapot",
+			"451 censored",
+			"O(n log n)",
+			"O(1) lookup",
+			"NP-hard nope",
+			"halting",
+			"TM tape ftw",
+			"lambda calc",
+			"monad? no thx",
+			"if (true)",
+			"while(1);",
+			"for(;;);",
+			"goto fail",
+			"use std::*;",
+			"import this",
+			"from x import *",
+			"DROP TABLE;",
+			"DELETE FROM users",
+			"UPDATE SET pwd"
+		],
+		"picker": {
+			"title": "pick your hero",
+			"subtitle": "click one to lock it in",
+			"random": "random",
+			"none": "no hero",
+			"close": "close",
+			"names": {
+				"physics": "3d physics",
+				"scramble": "scramble",
+				"ascii": "ascii",
+				"pixel": "pixel"
+			},
+			"descs": {
+				"physics": "3d text you can drag",
+				"scramble": "hover-scramble title",
+				"ascii": "ascii mesh with waves",
+				"pixel": "pixel physics, click to explode",
+				"random": "surprise me every boot",
+				"none": "no hero, pattern only"
+			}
+		},
+		"devControls": {
+			"title": "Dev Controls",
+			"copy": "Copy Values",
+			"close": "Close"
+		}
+	},
+	"resume": {
+		"title": "Profile",
+		"intro": "Full-Stack & Security Engineer working across enterprise platforms, industrial IoT, AI integration and offensive security research. I ship production apps (solar energy, SCADA, business comms) and run contracted + independent security research with coordinated disclosure on large SaaS platforms. Firmware/hardware reverse engineering and analysis of modern anti-tamper stacks (kernel, hypervisor, UEFI). Pursuing a Computer Science degree.",
+		"experience": {
+			"title": "Experience",
+			"items": [
+				{
+					"company": "Grupo Multiluz",
+					"position": "Full-Stack Engineer",
+					"period": "2025-01, present · Ipatinga, BR",
+					"highlights": [
+						"Enterprise Solar Platform (MultiluzSolarWebCalculadora): React, Node.js, Socket.IO, Google Cloud (BigQuery, Secret Manager), multi-DB (MSSQL/MySQL), digital signatures, doc generation, task scheduling.",
+						"Industrial SCADA System (MTZ_View): React 19, TypeScript, PostgreSQL. Raspberry Pi + Docker deployment. Real-time Modbus TCP/IP telemetry + alarm management.",
+						"WhatsApp Cloud API SaaS (wacraft-client): Angular 19, Rete.js (visual workflows), ApexCharts.",
+						"Bun + React 19 + Minio PWA (gpml-pwa): offline-first, Web Push notifications.",
+						"AI integration: RAG in production, local LLM hosting, model deployment for enterprise use."
+					]
+				},
+				{
+					"company": "SGS Canada",
+					"position": "Freelance Developer",
+					"period": "2021-10, present · Remote",
+					"highlights": [
+						"Migrated performance-critical C++ components to Rust for memory safety + efficiency gains.",
+						"Worked across low- and high-level stacks (C, C++, Rust, Python) in an English-speaking remote team.",
+						"Automated build, delivery and QA processes to improve reliability."
+					]
+				}
+			]
+		},
+		"highlightProjects": {
+			"title": "Highlight projects",
+			"items": [
+				{
+					"name": "ida-f32",
+					"url": "https://github.com/GabriWar/ida-f32",
+					"desc": "IDA Pro processor module for AMD's F32 CP/MEC GPU command-processor microcode ISA."
+				},
+				{
+					"name": "idaxport",
+					"url": "https://github.com/GabriWar/idaxport",
+					"desc": "IDA Pro export plugin for AI-assisted analysis: decompiled fns, xrefs, call graphs, vtables."
+				},
+				{
+					"name": "gammakay61-linux",
+					"url": "https://github.com/GabriWar/gammakay61-linux",
+					"desc": "Reverse-engineered the Gammakay61 (SK61L) USB HID protocol + native Linux RGB controller."
+				},
+				{
+					"name": "tozo-control",
+					"url": "https://github.com/GabriWar/tozo-control",
+					"desc": "Reverse-engineered TOZO earbuds BLE control + native Linux GTK4 app (battery, EQ, game mode)."
+				},
+				{
+					"name": "Offensive security research",
+					"url": null,
+					"desc": "Coordinated disclosure of multiple severe flaws in SaaS products: auth/authz, multi-tenant isolation, web security."
+				},
+				{
+					"name": "Commercial anti-tamper / DRM (private)",
+					"url": null,
+					"desc": "RE of a modern anti-tamper stack: kernel drivers (BYOVD), UEFI bootkit, bare-metal hypervisor, API hooking. 1,600+ decompiled functions."
+				}
+			]
+		},
+		"fullstack": {
+			"title": "Full-Stack",
+			"description": "End-to-end architecture with multi-tenant isolation from day one, hierarchical RBAC enforced at API, query and row level via PostgreSQL Row-Level Security, and full-stack observability through OpenTelemetry, Prometheus, Grafana and Loki. Backends in Node.js and Bun with strict TypeScript, Go with Fiber or Chi for compiled APIs, C++ and Rust when latency and throughput matter. Data on PostgreSQL with pgvector for semantic search, Redis Cluster for cache and queues, ClickHouse for analytical workloads, NATS or Kafka for event streaming.",
+			"detailed": "Frontends in React 19, Vue 3, Nuxt or SvelteKit with strict typing, SSR / SSG / ISR via Vite or Turbopack, design systems built on Tailwind and shadcn/ui. Containerization with Docker + BuildKit, orchestration on Kubernetes or Nomad, infrastructure as code via Terraform and Pulumi, GitOps with Argo CD or Flux. CI/CD on GitHub Actions and GitLab Pipelines, edge delivery through Cloudflare and Fastly. OpenAPI / AsyncAPI contracts, Swagger UI, contract tests via Pact, schema-driven types end to end."
+		},
+		"lowlevel": {
+			"title": "Low-Level & Reverse Engineering",
+			"description": "Systems engineering in C23, modern C++ (C++20/23) and Rust, with first-principles understanding of memory models, concurrency primitives and ABI boundaries. Reverse engineering of x86, x86_64, ARM and ARM64 binaries; firmware and microcode analysis (AMD F32, RS64); IDA Pro processor module and loader development; dynamic instrumentation with Frida and DynamoRIO; coverage-guided fuzzing with AFL++, libFuzzer and honggfuzz; protocol reverse engineering and vulnerability isolation through differential analysis.",
+			"detailed": "Toolchain: IDA Pro, Ghidra, Binary Ninja, radare2 / rizin, x64dbg, GDB / LLDB with pwndbg and GEF, QEMU + Unicorn for cross-arch emulation, Wireshark and tshark, Frida and DynamoRIO for hooking, BinDiff and Diaphora for binary diffing, angr and Triton for symbolic execution. Linux kernel internals (eBPF, KASAN, KCSAN), virtualization (KVM, Xen) and hypervisor-level instrumentation."
+		},
+		"ai": {
+			"title": "Artificial Intelligence",
+			"description": "End-to-end applied-AI infrastructure: LLM fine-tuning with LoRA, QLoRA, DoRA and full-parameter SFT via Hugging Face TRL, Axolotl and Unsloth on A100 / H100 / MI300X. RAG pipelines with dense embeddings (sentence-transformers, BGE-M3, E5-Mistral, Voyage), hybrid sparse-dense retrieval (BM25 + Reciprocal Rank Fusion) and cross-encoder rerankers (bge-reranker-v2, Cohere Rerank). Vector stores on pgvector, Qdrant, Milvus and Weaviate. Inference orchestration with vLLM, SGLang, TensorRT-LLM, llama.cpp and Ollama; structured generation through Outlines, XGrammar and JSON Schema constraints.",
+			"detailed": "Multi-step agents with tool use and function calling (OpenAI function calling, Anthropic tool use, MCP servers), evaluation pipelines via Ragas, DeepEval and TruLens (faithfulness, context recall, answer relevance) and observability through LangSmith, Langfuse and Helicone. Production deployments mixing proprietary (OpenAI, Anthropic, Google, Groq, Cerebras) and open-source (Llama 3, Qwen 2.5, Mistral, DeepSeek) models with prompt caching, semantic caching, KV-cache reuse, speculative decoding and per-tenant token observability."
+		},
+		"linux": {
+			"title": "Linux & Infrastructure",
+			"description": "Deep admin and engineering across Arch, Debian, Ubuntu, NixOS and Kali. systemd unit authoring, cgroup v2 resource isolation, namespace and seccomp-bpf sandboxing. Performance tuning with perf, eBPF (bcc, bpftrace, libbpf), flame graphs and the BPF Compiler Collection. Production incident response with structured logging through journald, Loki and Vector, and distributed tracing via OpenTelemetry. Custom kernel patches, out-of-tree modules and DRM driver work for unsupported hardware (AMD F32 microcode, BC-250 APU)."
+		},
+		"security": {
+			"title": "Security & Compliance",
+			"description": "Encryption at rest and in transit: AES-256-GCM column-level on credentials and sensitive data via libsodium with envelope encryption through AWS KMS or HashiCorp Vault; TLS 1.3 end-to-end with HSTS preload, OCSP stapling and modern cipher suites only. Argon2id for password hashing, secrets in environment variables or KMS-backed stores, never in the database. Mandatory MFA + RBAC with least privilege: TOTP (RFC 6238) and FIDO2 / WebAuthn (YubiKey) for owner, admin and developer roles; OAuth 2.1 + OIDC with PKCE, signed JWTs (EdDSA / ES256) and centralized policy enforcement via OPA or Casbin, with internal access reviews.",
+			"detailed": "GDPR / LGPD / CPRA aligned: public privacy notice, data subject access / export / deletion endpoints, minimum retention per data type, deauth provider within 24h, DPIA for high-risk processing. Continuous scanning: OWASP ZAP + Nuclei (DAST), Semgrep + CodeQL (SAST), Trivy + Grype container and SBOM (CycloneDX / SPDX) scanning, gitleaks + TruffleHog secret detection, quarterly and on every material release. Dependabot + Renovate for SCA. Sigstore / cosign signed artifacts with SLSA-style supply-chain hardening. Vulnerability SLAs: critical 7 days, high 14 days, medium 30 days. Aligned with NIST SP 800-53 and CIS benchmarks."
+		},
+		"devops": {
+			"title": "DevOps & Platform",
+			"description": "Infrastructure as code with Terraform for everything provisionable (clusters, DNS, object storage, IAM, CDN, secrets backends) versioned and reconciled through CI, no ClickOps. Orchestration on Kubernetes when the workload justifies it, k3s for smaller fleets running on Hetzner or DigitalOcean boxes. Helm for shipping internal apps as charts with per-env values, ArgoCD reconciling git → cluster so the manifest is the source of truth, not whatever was last kubectl-apply'd at 3am.",
+			"detailed": "Edge with Nginx or Traefik: TLS termination, gzip/brotli, request coalescing, rate limits, mTLS to upstreams; Cloudflare in front when DDoS protection matters. Stateful pieces self-hosted when control matters: Redis (primary + sentinel-failover replica, RDB + AOF), PostgreSQL (streaming replication, PITR via WAL archive, pgBouncer), Minio for S3-compatible blob storage. Observability via Prometheus + Grafana + Loki + OpenTelemetry, single trace ID from browser → nginx → pod → redis → postgres. CI/CD via GitHub Actions and GitLab CI: multi-stage Docker builds, Trivy + Grype vuln scans gating prod, cosign-signed artifacts, automatic rollback on failing readiness probes. Secrets in Vault or KMS-backed env injection, never in repo."
+		},
+		"education": {
+			"title": "Education",
+			"description": "Computer Science and Computer Engineering, in progress. Ongoing study of systems architecture, compilers, language theory, and applied AI research. Languages: Portuguese (native), English (fluent), Spanish (proficient), Italian (basic), German and Russian (learning)."
+		},
+		"projects": {
+			"title": "Projects & Stack"
+		},
+		"skills": {
+			"languages": "Languages",
+			"backend": "Backend & Data",
+			"frontend": "Frontend",
+			"ai": "AI / ML",
+			"security": "Reverse Engineering",
+			"embedded": "Embedded & Kernel",
+			"cloud": "Cloud & Infra",
+			"devops": "DevOps",
+			"langs": "Spoken Languages",
+			"content": {
+				"languages": "C++, C, Rust, TypeScript, Python, Go, Assembly (x86/x86_64/ARM)",
+				"backend": "Node.js, Bun, REST/gRPC, WebSockets, PostgreSQL + pgvector, Redis, MySQL, SQLite",
+				"frontend": "React, Nuxt, Vue, SvelteKit, Vite, custom design systems, SSR/SSG",
+				"ai": "LLMs (fine-tuning, LoRA/QLoRA), RAG, embeddings (sentence-transformers, BGE, E5), pgvector / Qdrant / Milvus, vLLM, llama.cpp, Ollama, agents, pipeline evaluation",
+				"security": "IDA Pro (+ processor modules), Ghidra, radare2, x64dbg, GDB, Frida, Wireshark",
+				"embedded": "Microcontroller and SoC firmware, USB HID, BLE, Modbus TCP/IP, Linux kernel internals, QEMU",
+				"cloud": "Docker, container orchestration, GCP, Nginx, Cloudflare Tunnel, Vercel, DigitalOcean, self-hosting",
+				"devops": "Git, CI/CD (GitHub Actions, GitLab CI), systemd, observability (Prometheus, Grafana), infrastructure automation",
+				"langs": "Portuguese (native), English (fluent), Spanish (proficient), Italian (basic), German and Russian (learning)"
+			}
+		}
+	},
+	"projectsList": {
+		"ui": {
+			"size": "size",
+			"rows": "rows",
+			"click_open": "click a row to open",
+			"offset": "offset",
+			"eof": "end of file"
+		},
+		"blog": {
+			"title": "Blog",
+			"description": "Notes, writeups, and rants. Mostly about reverse engineering, Linux, and whatever else is melting my brain this week."
+		},
+		"security": {
+			"title": "Security",
+			"description": "Offensive security, responsible disclosure, and secure systems architecture."
+		},
+		"reversing": {
+			"title": "Reversing",
+			"description": "Disassembly, processor modules, firmware unpacking, and runtime instrumentation."
+		},
+		"devops": {
+			"title": "DevOps & Platform",
+			"description": "Terraform, Kubernetes, Redis, observability: infrastructure as code from the cluster down."
+		},
+		"ai": {
+			"title": "AI",
+			"description": "Advanced Artificial Intelligence solutions focusing on predictive models and data analysis.",
+			"bodyInspector": {
+				"mock": "MOCK",
+				"selection": "selection"
+			},
+			"trainingMonitor": {
+				"metrics": {
+					"loss": "loss",
+					"acc": "acc",
+					"ppl": "ppl",
+					"lr": "lr",
+					"batch": "batch",
+					"accuracy": "accuracy",
+					"emb": "emb"
+				},
+				"idle": "idle: hit ▸ train & generate on the panel above"
+			},
+			"diffusion": {
+				"sub": "real tiny diffusion LM · trained in-browser",
+				"stepLabel": "step",
+				"params": "params",
+				"intro": "a real masked-diffusion language model, trained from scratch in your browser on public-domain poetry (blake · dickinson · stevenson · rossetti)",
+				"warn": "heads up, it trains a real net in your browser, so the page will hitch for a few seconds",
+				"start": "train & generate",
+				"loading": "loading poetry corpus…",
+				"training": "training tiny LM from scratch…",
+				"corpus": "word corpus",
+				"loss": "loss",
+				"play": "play",
+				"pause": "pause",
+				"step": "step",
+				"generate": "re-generate",
+				"temp": "temp",
+				"tokens": "tokens",
+				"steps": "denoise steps",
+				"gentime": "step time",
+				"sweet": "sweet",
+				"tSteps": "train steps",
+				"lrate": "learn rate",
+				"hidden": "hidden",
+				"embdim": "embed dim",
+				"ctx": "context ±",
+				"retrain": "retrain",
+				"prompt": "prompt",
+				"promptPlaceholder": "give it words to weave around…",
+				"promptHint": "in-vocab words become locked anchors: the model infills around them",
+				"oov": "off-vocab",
+				"entropy": "entropy",
+				"committed": "committed",
+				"denoising": "denoising",
+				"converged": "converged",
+				"dist": "p(token) · model top-k",
+				"pending": "masked",
+				"locked": "locked",
+				"hint": "real model probabilities: hover any token as the canvas denoises"
+			},
+			"oracle": {
+				"ui": {
+					"temp": "TEMP",
+					"live": "LIVE",
+					"mock": "MOCK",
+					"thinking": "thinking",
+					"placeholder": "ask jeff anything...",
+					"ask": "ask jeff",
+					"stop": "stop",
+					"reset": "reset",
+					"compact": "compact",
+					"hint": "ask jeff to do your homework, he knows (almost) everything",
+					"log_title": "jeff.log",
+					"scope": "world",
+					"overdrive": "OVERDRIVE"
+				},
+				"tiers": {
+					"calm": [
+						"most likely",
+						"for sure",
+						"yes",
+						"no",
+						"maybe",
+						"outlook good",
+						"signs point to yes",
+						"it is decidedly so",
+						"you may rely on it",
+						"as I see it, yes",
+						"cannot predict now",
+						"reply hazy · try again",
+						"ask again later",
+						"don't count on it",
+						"outlook not so good",
+						"concentrate and resample"
+					],
+					"normal": [
+						"ship it",
+						"LGTM",
+						"merge it",
+						"confidence 0.97",
+						"8 of 10 attention heads agree",
+						"gradient points that way",
+						"unit tests would probably pass",
+						"idk bro",
+						"error 429 · rate limited",
+						"hallucinating · do not trust this",
+						"needs a second opinion from stackoverflow",
+						"the linter has no strong opinions",
+						"compiles on my machine",
+						"works on staging",
+						"rejected by the discriminator",
+						"build failed · see log",
+						"reviewer requested changes",
+						"NaN",
+						"null pointer · try again",
+						"deadlocked",
+						"500 internal server error",
+						"deprecated since 2019"
+					],
+					"spicy": [
+						"yes absolutely",
+						"hell no",
+						"nah bro",
+						"100% · works on my machine",
+						"it is a skill issue",
+						"rm -rf / your plan",
+						"works in dev, breaks in prod",
+						"just restart it, trust me",
+						"blame the intern",
+						"chatgpt said yes so yes",
+						"google it yourself",
+						"go touch grass",
+						"ratio + L + you fell off",
+						"segfault · core dumped",
+						"the loss function disagrees (loudly)",
+						"this is giving main character energy",
+						"my sources (kaggle) say no",
+						"cope + seethe + recompile"
+					],
+					"unhinged": [
+						"f*** yes",
+						"f*** no",
+						"h*ll yes brother",
+						"absof***inglutely",
+						"d*mn right",
+						"sh*t yes",
+						"holy sh*t no",
+						"no f***ing way",
+						"what the f*** are you asking",
+						"b***sh*t, but fine, yes",
+						"g*ddamn right",
+						"my b***s, definitely",
+						"p*ss off and retry",
+						"eat sh*t and recompile",
+						"f*** around and find out",
+						"are you f***ing serious rn",
+						"smh b***h (affectionately)",
+						"f*** it, ship it",
+						"on g*d",
+						"get b*nt",
+						"d*mn straight",
+						"bruh... yes",
+						"touch gr*ss",
+						"f***ed around · found out",
+						"no · and f*** your prompt",
+						"why the h*ll not",
+						"hell yeah m**f***er"
+					]
+				}
+			}
+		},
+		"crm": {
+			"title": "CRM",
+			"description": "Comprehensive Customer Relationship Management system tailored for business needs.",
+			"funnel": {
+				"label": "conversion funnel · random seed per load",
+				"ui": {
+					"stages": "stages",
+					"live": "LIVE",
+					"paused": "PAUSED",
+					"reroll": "reroll",
+					"pause": "pause",
+					"resume": "resume",
+					"paid": "paid",
+					"churned": "churned",
+					"net_new": "net new",
+					"top_paid": "top → paid"
+				},
+				"stages": {
+					"top": [
+						"cold strangers",
+						"accidental clicks",
+						"bots in disguise",
+						"wrong link in a tweet",
+						"curious onlookers",
+						"scroll-through visitors",
+						"mom (sent by me)",
+						"window shoppers"
+					],
+					"aware": [
+						"read the faq once",
+						"read one blog post",
+						"opened the pricing page",
+						"stalked the changelog",
+						"screenshotted the demo",
+						"asked a friend about us",
+						"added to google doc"
+					],
+					"engaged": [
+						"signed up (lied)",
+						"signed up with burner email",
+						"booked the demo",
+						"showed up to the demo",
+						"asked 3 pre-sales questions",
+						"dm'd the founder",
+						"joined the discord"
+					],
+					"negotiate": [
+						"ghosted the demo",
+						"asked for a discount",
+						"asked for \"enterprise features\"",
+						"wants custom sso",
+						"needs legal review",
+						"said \"let me check with my team\"",
+						"on a pilot forever"
+					],
+					"paid": [
+						"paid customer",
+						"annual contract",
+						"signed the MSA"
+					],
+					"dead": [
+						"churned, blamed us",
+						"disputed the invoice",
+						"ghost → refund",
+						"moved to a competitor",
+						"got acquired, disappeared"
+					]
+				}
+			},
+			"kpi": {
+				"ui": {
+					"live": "LIVE",
+					"paused": "PAUSED",
+					"pause": "pause",
+					"resume": "resume",
+					"now": "now"
+				},
+				"labels": {
+					"mrr": "MRR",
+					"conv": "CONVERSION",
+					"p95": "API P95"
+				}
+			}
+		},
+		"supervisorio": {
+			"title": "SCADA & TELEMETRY",
+			"description": "Industrial supervisory systems with real-time telemetry, PLC comms, and live dashboards.",
+			"chaos": "chaos",
+			"legend": "click valves ◆ & pumps ◐ to toggle",
+			"alarmLog": {
+				"ack_all": "ack all",
+				"empty": "no active alarms",
+				"headers": {
+					"time": "time",
+					"sev": "sev",
+					"tag": "tag",
+					"message": "message",
+					"value": "value",
+					"ack": "ack"
+				}
+			}
+		},
+		"pwa": {
+			"title": "PWA & MESSAGING",
+			"description": "Installable offline-first web apps with push notifications, service workers, and WhatsApp Cloud API integration.",
+			"clear_all": "clear all",
+			"syncWorker": {
+				"headers": {
+					"worker": "worker",
+					"thread": "thread",
+					"pending": "pending",
+					"processed": "processed",
+					"failed": "failed"
+				},
+				"ui": {
+					"event_log": "event log",
+					"pending_queue": "pending queue · drains every 450ms",
+					"queue_empty": "queue empty",
+					"no_events": "no events",
+					"more_queued": "more queued"
+				}
+			},
+			"pushSender": {
+				"ui": {
+					"tag": "tag",
+					"title": "title",
+					"body": "body",
+					"presets": "presets",
+					"send_push": "send push",
+					"burst": "burst",
+					"click_hint": "click = send · right-click = load into form"
+				}
+			}
+		},
+		"linux": {
+			"title": "LINUX",
+			"description": "Custom Linux distributions and shell scripting automation tools.",
+			"bios": {
+				"title": "Aptio Setup, Gabri Megatrends",
+				"help": "Help",
+				"select": "Select"
+			},
+			"boot": {
+				"os": "GabriOS 0.1 (pixel edition) · tty1",
+				"password": "Password:",
+				"login": "Last login: whenever · entering desktop session..."
+			},
+			"bsod": {
+				"info": "For more information about this issue and possible fixes,",
+				"support": "If you call a support person, give them this info:",
+				"stop_code": "Stop code:",
+				"failed": "What failed:",
+				"message": "Your GabriOS ran into a problem and needs to restart. We're just collecting some error info, and then we'll restart for you",
+				"complete": "complete",
+				"reboot_hint": "click anywhere to reboot"
+			},
+			"fileManager": {
+				"up": "up",
+				"home": "home",
+				"empty": "empty dir",
+				"items": "items"
+			},
+			"paint": {
+				"undo": "undo",
+				"clear": "clear",
+				"fill": "fill",
+				"random": "random",
+				"rmbErase": "rmb = erase"
+			},
+			"editor": {
+				"save": "save",
+				"run": "run",
+				"lines": "lines",
+				"chars": "chars",
+				"notFound": "file not found"
+			},
+			"window": {
+				"minimize": "minimize",
+				"maximize": "maximize",
+				"close": "close",
+				"cannot_close": "cannot close while maximized"
+			},
+			"desktop": {
+				"av": {
+					"title": "GabriOS Defender: Anti-Virus Prompt",
+					"file": "File:",
+					"publisher": "Publisher:",
+					"unknown": "Unknown",
+					"signature": "Signature:",
+					"none": "None · unsigned binary",
+					"threats": "Detected threats:",
+					"risk": "Risk level:",
+					"extreme": "EXTREME"
+				},
+				"shutdown": "Shutdown",
+				"tux_says": "TUX SAYS",
+				"click_cycle": "click to cycle",
+				"tux_messages": [
+					"you are running a fake linux. the real linux is over at kernel.org",
+					"psst, check out /home/gabriwar/projects",
+					"try `cat ~/linux.md` in the terminal",
+					"did you know tux is a penguin because linus visited an aquarium and got pecked by one",
+					"do NOT click virus.exe. seriously. (please click it)",
+					"sudo doesn't work here. you're not in the sudoers file",
+					"pro tip: drag icons around. click empty space to marquee select",
+					"kernel 6.66.0, the number is a coincidence (it's not)"
+				]
+			},
+			"settings": {
+				"tabs": {
+					"display": "Display",
+					"sound": "Sound",
+					"network": "Network",
+					"about": "About"
+				},
+				"wallpaper": "Wallpaper",
+				"theme": "Theme",
+				"effects": "Effects",
+				"scanlines": "CRT scanlines",
+				"flicker": "random flicker",
+				"beeps": "System beeps",
+				"bootBeep": "boot beep",
+				"clickBeep": "keyboard click beep",
+				"volume": "Master Volume",
+				"wifi": "WiFi",
+				"interface": "Interface",
+				"os_info": "GabriOS 0.1 (pixel edition)",
+				"kernel": "Kernel 6.66.0-gabriwar",
+				"built_with": "Built with Nuxt, Vue, and pure spite",
+				"about_note": "this os is a toy. the real linux work is on my github, reach it via the Files app or the portfolio."
+			},
+			"android": {
+				"tip": "long-press shutdown · tap an app",
+				"shutdown": "shutdown",
+				"recentApps": "recent apps",
+				"noRecentApps": "no recent apps",
+				"appRunning": "app · running",
+				"secureBoot": "SECURE BOOT VIOLATION",
+				"virusBlocked": "virus.exe blocked"
+			}
+		}
+	},
 	"bc250": {
 		"title": "bc250 bios recolour",
 		"intro": [
@@ -61,6 +1039,11 @@
 		"logoFill": "fill the canvas (crops to fit)",
 		"logoNew": "new",
 		"logoScreen": "as it lands on a 1080p screen",
-		"failed": "failed:"
+		"failed": "failed:",
+		"compare": "[ show the original ]",
+		"reviewHint": "click 'show the original' to compare before you confirm",
+		"contrastAck": "i checked the contrast by clicking the previews above, and every screen is still readable",
+		"blocked": "tick both boxes to unlock the download",
+		"compareBack": "[ back to yours ]"
 	}
 }

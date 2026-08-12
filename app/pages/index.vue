@@ -11,6 +11,8 @@ useSeoMeta({
 	ogUrl: "https://www.gabriwar.xyz/bc250",
 });
 
+import { STOCK } from "~/utils/bc250/palette.ts";
+
 const { busy, status, error, info, progress, load, build } = useBc250Bios();
 
 const SAFE_INDEX = 1;
@@ -48,6 +50,10 @@ function withEdits(base: number[]): number[] {
 
 const previewColors = computed(() => withEdits(info.value?.palettes[0]?.colors ?? []));
 const popupColors = computed(() => withEdits(info.value?.palettes[1]?.colors ?? []));
+// The factory tables, not the uploaded file's: someone comparing a ROM that
+// was already recoloured needs to see what the board shipped with.
+const originalColors = STOCK.screen;
+const originalPopupColors = STOCK.popups;
 
 const currentColor = computed({
 	get: () => hex(previewColors.value[selected.value] ?? 0),
@@ -206,6 +212,42 @@ onMounted(() => {
 });
 onBeforeUnmount(() => window.removeEventListener("resize", fitAnsi));
 
+// The download waits on the user actually looking. One button swaps every
+// preview back to the palette the ROM arrived with, and until it has been used
+// there is nothing to tick: a contrast problem is invisible unless you have
+// seen what it replaced.
+const showOriginal = ref(false);
+const didCompare = ref(false);
+const contrastOk = ref(false);
+const blink = ref(false);
+const blinkCompare = ref(false);
+
+function toggleOriginal() {
+	showOriginal.value = !showOriginal.value;
+	didCompare.value = true;
+}
+
+const shown = computed(() => (showOriginal.value ? originalColors : previewColors.value));
+const shownPopup = computed(() =>
+	showOriginal.value ? originalPopupColors : popupColors.value,
+);
+
+function flash(flag: Ref<boolean>) {
+	flag.value = false;
+	requestAnimationFrame(() => (flag.value = true));
+	setTimeout(() => (flag.value = false), 1600);
+}
+
+// Blocked download points at whichever box is unticked; ticking one without
+// having looked points back at the button that shows what you are replacing.
+const nudge = () => flash(didCompare.value ? blink : blinkCompare);
+
+watch(acked, (on) => {
+	if (on && !didCompare.value) flash(blinkCompare);
+});
+
+const unlocked = computed(() => acked.value && contrastOk.value);
+
 const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_recoloured.ROM");
 </script>
 
@@ -270,7 +312,7 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
         <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.logo")) }}</div>
         <div class="previews">
           <figure class="preview">
-            <div class="screen-frame" :style="{ background: hex(previewColors[0] ?? 0) }">
+            <div class="screen-frame" :style="{ background: hex(shown[0] ?? 0) }">
               <img :src="info.logo.url" :style="onScreen(info.logo.width)" alt="boot logo">
             </div>
             <figcaption class="dim-text">
@@ -278,7 +320,7 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
             </figcaption>
           </figure>
           <figure v-if="newLogo" class="preview">
-            <div class="screen-frame" :style="{ background: hex(previewColors[0] ?? 0) }">
+            <div class="screen-frame" :style="{ background: hex(shown[0] ?? 0) }">
               <img :src="newLogo.url" :style="onScreen(newLogo.width)" alt="new boot logo">
             </div>
             <figcaption class="dim-text">
@@ -286,7 +328,9 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
             </figcaption>
           </figure>
         </div>
-        <div class="logo-row centre"><span class="dim-text">{{ t("bc250.logoScreen") }}</span></div>
+        <div class="logo-row centre">
+          <span class="dim-text">{{ t("bc250.logoScreen") }}</span>
+        </div>
         <div class="logo-row">
           <button class="link" data-testid="logo-size" @click="customSize = !customSize">
             {{ customSize ? t("bc250.logoSizeKeep") : t("bc250.logoSizeCustom") }}
@@ -358,8 +402,8 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
         <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
       </div>
 
-      <Bc250Screen :colors="previewColors" :popup-colors="popupColors" />
-        <Bc250Console :colors="previewColors" />
+      <Bc250Screen :colors="shown" :popup-colors="shownPopup" />
+      <Bc250Console :colors="shown" />
 
       <div class="ansi-screen">
         <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.output")) }}</div>
@@ -367,16 +411,40 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
           <button class="link" :disabled="busy || (!edits.size && !newLogo)" data-testid="generate" @click="generate">
             {{ busy ? status + " ..." : t("bc250.generate") }}
           </button>
-          <a v-if="downloadUrl && acked" class="link" data-testid="download" :href="downloadUrl" :download="outName">
-            {{ t("bc250.download") }}
-          </a>
+          <a
+            v-if="downloadUrl && unlocked"
+            class="link"
+            data-testid="download"
+            :href="downloadUrl"
+            :download="outName"
+          >{{ t("bc250.download") }}</a>
+          <button
+            v-else-if="downloadUrl"
+            class="link off"
+            data-testid="download-blocked"
+            @click="nudge"
+          >{{ t("bc250.download") }}</button>
+          <button class="link" :class="{ blink: blinkCompare }" data-testid="compare" @click="toggleOriginal">
+            {{ showOriginal ? t("bc250.compareBack") : t("bc250.compare") }}
+          </button>
         </div>
-        <div v-if="downloadUrl" class="actions">
-          <SCheckbox v-model="acked" class="tick" data-testid="ack">{{ t("bc250.ack") }}</SCheckbox>
-        </div>
-        <div v-if="downloadUrl && !acked" class="ansi-line">
-          <span class="row-edge">║ </span><span class="dim-text">{{ pad("  " + t("bc250.ackHint")) }}</span><span class="row-edge"> ║</span>
-        </div>
+
+        <template v-if="downloadUrl">
+          <div class="actions" :class="{ blink }">
+            <SCheckbox v-model="acked" class="tick" data-testid="ack">{{ t("bc250.ack") }}</SCheckbox>
+          </div>
+          <div v-if="didCompare" class="actions" :class="{ blink }">
+            <SCheckbox v-model="contrastOk" class="tick" data-testid="contrast">
+              {{ t("bc250.contrastAck") }}
+            </SCheckbox>
+          </div>
+          <div v-else class="ansi-line">
+            <span class="row-edge">║ </span><span class="dim-text">{{ pad("  " + t("bc250.reviewHint")) }}</span><span class="row-edge"> ║</span>
+          </div>
+          <div v-if="!unlocked" class="ansi-line">
+            <span class="row-edge">║ </span><span class="dim-text">{{ pad("  " + t("bc250.blocked")) }}</span><span class="row-edge"> ║</span>
+          </div>
+        </template>
         <div class="ansi-line" data-testid="progress">
           <span class="row-edge">║ </span><span class="body-text">{{ pad(bar) }}</span><span class="row-edge"> ║</span>
         </div>
@@ -513,6 +581,23 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
 
 /* the ANSI screen sets white-space: pre, which stops this label wrapping
    and pushes the frame wider than its own border */
+.link.off { opacity: 0.5; }
+
+/* the blocked download nudges whichever box is still unticked, rather than
+   silently doing nothing */
+@keyframes nudge {
+  0%, 100% { background: transparent; }
+  25%, 75% { background: color-mix(in srgb, var(--color-text-primary) 22%, transparent); }
+}
+
+.actions.blink,
+.link.blink { animation: nudge 0.4s ease-in-out 3; }
+
+@media (prefers-reduced-motion: reduce) {
+  .actions.blink,
+  .link.blink { animation: none; outline: 2px solid var(--color-text-primary); }
+}
+
 .tick {
   white-space: normal;
   max-width: min(46ch, 100%);
