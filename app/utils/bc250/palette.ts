@@ -11,6 +11,10 @@ import {
 	type Section,
 } from "./firmware.ts";
 
+// Where an image this cannot read should end up, rather than dying silently
+// on someone else's machine.
+const REPORT = "https://github.com/GabriWar/bc250-bios-modder-online/issues";
+
 export const PALETTE_SIZE = 16;
 
 export const ROLES: Record<number, string> = {
@@ -117,9 +121,16 @@ export function findPalettes(c: Container): PaletteRef[] {
 	const out: PaletteRef[] = [];
 	for (const which of Object.keys(MODULES) as (keyof typeof MODULES)[]) {
 		const body = moduleBody(c, MODULES[which]);
-		if (!body) throw new Error(`module for ${which} not found`);
+		if (!body) throw new Error(
+				`the ${which} module is missing from this image. if it is a BC-250 BIOS, it is a build this tool ` +
+					`does not know yet: please report it at ${REPORT}`,
+			);
 		const at = locate(c.payload, body.start, body.end, which);
-		if (at === null) throw new Error(`palette not located in ${which}`);
+		if (at === null) throw new Error(
+				`could not find the ${which} palette. the table is anchored on the bytes that follow it, so a ` +
+					`BIOS build laid out differently reads as unknown rather than being guessed at. please report ` +
+					`this image at ${REPORT}`,
+			);
 		out.push({
 			which,
 			offset: at,
@@ -198,13 +209,19 @@ async function inflateSection(buf: Uint8Array, sec: Section, lzma: Lzma): Promis
 
 export async function replaceLogo(c: Container, image: Uint8Array, lzma: Lzma): Promise<void> {
 	const logo = await findLogo(c, lzma);
-	if (!logo) throw new Error("no boot logo in this image");
+	if (!logo) throw new Error(
+		"no boot logo found. this tool reads PNG and JPEG splashes; if yours is neither, report the image at " +
+			REPORT,
+	);
 
 	const file = c.files.find((f) => f.guid === logo.fileGuid);
 	if (!file) throw new Error("lost the logo file");
 
 	const outer = walkSections(c.payload, file.body, file.end).find((s) => s.type === SEC_GUID_DEFINED);
-	if (!outer) throw new Error("logo is not wrapped the way this tool expects");
+	if (!outer) throw new Error(
+		"the logo is not wrapped the way this tool expects, so replacing it would risk the image. report it at " +
+			REPORT,
+	);
 	const headerLen = c.payload[outer.body + 16]! | (c.payload[outer.body + 17]! << 8);
 
 	const inner = await inflateSection(c.payload, outer, lzma);

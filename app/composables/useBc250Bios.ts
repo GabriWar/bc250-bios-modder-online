@@ -24,6 +24,13 @@ export interface RomInfo {
 	logo: { url: string; width: number; height: number; bytes: number; format: ImageFormat } | null;
 }
 
+// Anything that goes wrong reaches both places: the panel the user is looking
+// at, and the console, where the stack survives for whoever gets sent the bug.
+function report(where: string, e: unknown): string {
+	console.error(`[bc250] ${where}`, e);
+	return e instanceof Error ? e.message : String(e);
+}
+
 let codec: Lzma | null = null;
 
 const paint = () =>
@@ -107,7 +114,7 @@ export function useBc250Bios() {
 			status.value = "";
 			progress.value = 0;
 		} catch (e) {
-			error.value = e instanceof Error ? e.message : String(e);
+			error.value = report(`reading ${file.name}`, e);
 			container = null;
 		} finally {
 			busy.value = false;
@@ -169,6 +176,9 @@ export function useBc250Bios() {
 			status.value = "";
 			progress.value = 1;
 			return new Blob([new Uint8Array(out)], { type: "application/octet-stream" });
+		} catch (e) {
+			report("building the image", e);
+			throw e;
 		} finally {
 			busy.value = false;
 		}

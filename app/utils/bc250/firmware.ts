@@ -142,7 +142,10 @@ export async function openContainer(rom: Uint8Array, lzma: Lzma): Promise<Contai
 			};
 		}
 	}
-	throw new Error("compressed DXE volume not found, is this a BC-250 BIOS?");
+	throw new Error(
+		"no compressed DXE volume here. this does not look like a BC-250 BIOS: check the file is a full 16 MiB " +
+			"chip image and not a truncated download",
+	);
 }
 
 function volumeStarts(rom: Uint8Array): number[] {
@@ -151,7 +154,10 @@ function volumeStarts(rom: Uint8Array): number[] {
 		if (rom[i + 40] === 0x5f && rom[i + 41] === 0x46 && rom[i + 42] === 0x56 && rom[i + 43] === 0x48)
 			out.push(i);
 	}
-	if (!out.length) throw new Error("no firmware volume in this file");
+	if (!out.length)
+		throw new Error(
+			"no firmware volume in this file. a BC-250 BIOS is a 16 MiB chip image; this is probably not one",
+		);
 	return out;
 }
 
@@ -224,7 +230,10 @@ export async function sealContainer(c: Container, lzma: Lzma): Promise<Uint8Arra
 		let free = 0;
 		while (file.end + free < rom.length && rom[file.end + free] === 0xff) free++;
 		if (grew > free)
-			throw new Error(`recompressed image needs ${grew} more bytes than the volume has free`);
+			throw new Error(
+				`this image has no room: the result needs ${grew} more bytes than the volume has free. a smaller ` +
+					`boot logo is the usual fix`,
+			);
 	}
 
 	out.set(compressed, c.compressedStart);

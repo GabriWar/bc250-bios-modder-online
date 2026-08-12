@@ -105,6 +105,7 @@ async function generate() {
 	try {
 		downloadUrl.value = URL.createObjectURL(await build(edits.value, newLogo.value?.bytes));
 	} catch (e) {
+		console.error("[bc250] generate", e);
 		error.value = e instanceof Error ? e.message : String(e);
 		progress.value = 0;
 	}
@@ -165,6 +166,7 @@ async function renderLogo() {
 			height,
 		};
 	} catch (e) {
+		console.error("[bc250] rendering the logo", e);
 		logoError.value = e instanceof Error ? e.message : String(e);
 	}
 }
