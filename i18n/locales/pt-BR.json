@@ -994,19 +994,15 @@
 		"slack": "espaco pra crescer",
 		"volumeFree": "livre dentro do volume",
 		"slackNote": "a folga e medida deste arquivo, nao presumida",
-		"palettes": "paletas",
-		"colour": "cor",
-		"index": "indice",
+		"palettes": "paleta",
 		"reset": "[ desfazer ]",
-		"advanced": "[ editar todos os indices ]",
-		"advancedOff": "[ so o azul ]",
 		"warning": [
-			"o indice 1 e o seguro: e o texto do menu e o fundo",
-			"padrao dos dialogos, e nada mais depende dele. os",
-			"outros carregam estrutura: o 7 e o fundo do corpo",
-			"e o 0 e o texto de ajuda, e escurecer os dois deixa",
-			"a ajuda ilegivel. so mexa se estiver disposto a",
-			"regravar."
+			"todos os indices sao editaveis, mas poucos mudam algo",
+			"visivel. o 0 pinta os cabecalhos, a tela de boot e o",
+			"shell. o 1 e o texto do corpo e o fundo dos dialogos.",
+			"o 7 e a tela. o 8 sao os campos so-leitura e o 15 os",
+			"valores editaveis. mantenha cada par legivel contra o",
+			"outro e use 'ver o original' antes de gravar."
 		],
 		"preview": "previa",
 		"output": "saida",
@@ -1032,9 +1028,10 @@
 		"logoSizeCustom": "[ tentar outro tamanho ]",
 		"logoSizeNote": [
 			"o firmware centraliza a logo no tamanho em pixels dela e",
-			"nao escala, entao canvas maior e o unico jeito de ter logo",
-			"maior. limitado a 1024x768, que e o tamanho testado em",
-			"hardware de verdade."
+			"nao escala, entao o canvas e o unico que decide o tamanho",
+			"final. 1024x768 foi testado; acima disso a geracao recusa",
+			"se nao couber no volume. 1x1 e como outras imagens vem",
+			"sem splash nenhuma."
 		],
 		"logoFill": "preencher o canvas (corta o que sobra)",
 		"logoNew": "nova",
@@ -1044,6 +1041,9 @@
 		"reviewHint": "clique em 'ver o original' pra comparar antes de confirmar",
 		"contrastAck": "conferi o contraste clicando nas imagens acima, e todas as telas continuam legiveis",
 		"blocked": "marque as duas caixas pra liberar o download",
-		"compareBack": "[ voltar pra sua ]"
+		"compareBack": "[ voltar pra sua ]",
+		"bothTables": "cores:",
+		"revert": "clique pra desfazer so esta",
+		"resetAll": "[ tudo pro de fabrica ]"
 	}
 }

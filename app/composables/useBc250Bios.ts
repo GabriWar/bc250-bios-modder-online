@@ -9,6 +9,8 @@ import {
 import {
 	findPalettes,
 	findLogo,
+	setColor,
+	STOCK,
 	replaceLogo,
 	imageSize,
 	setColorEverywhere,
@@ -121,7 +123,11 @@ export function useBc250Bios() {
 		}
 	}
 
-	async function build(edits: Map<number, number>, logo?: Uint8Array | null): Promise<Blob> {
+	async function build(
+		edits: Map<number, number>,
+		restored: Set<number>,
+		logo?: Uint8Array | null,
+	): Promise<Blob> {
 		if (!container || !original) throw new Error("no ROM loaded");
 		busy.value = true;
 		try {
@@ -131,6 +137,11 @@ export function useBc250Bios() {
 			progress.value = 0;
 			await step(0.1);
 			const palettes = findPalettes(container);
+			// The two factory tables are not the same: they part company at 6 and
+			// from 8 to 14. Restoring an index has to put each table back to its
+			// own value, while a colour the user picked goes to both.
+			for (const index of restored)
+				for (const p of palettes) setColor(container, p, index, STOCK[p.which][index] ?? 0);
 			for (const [index, rgb] of edits) setColorEverywhere(container, palettes, index, rgb);
 
 			if (logo) await replaceLogo(container, logo, lzma);
@@ -166,12 +177,18 @@ export function useBc250Bios() {
 
 			status.value = "verifying colours";
 			await step(0.97);
-			for (const p of findPalettes(check))
+			for (const p of findPalettes(check)) {
+				for (const index of restored)
+					if (p.colors[index] !== (STOCK[p.which][index] ?? 0))
+						throw new Error(
+							`${p.which} index ${index} did not go back to factory: reads #${p.colors[index]!.toString(16)}`,
+						);
 				for (const [index, rgb] of edits)
 					if (p.colors[index] !== rgb)
 						throw new Error(
 							`${p.which} index ${index} reads back #${p.colors[index]!.toString(16)}`,
 						);
+			}
 
 			status.value = "";
 			progress.value = 1;

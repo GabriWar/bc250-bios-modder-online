@@ -11,7 +11,7 @@ useSeoMeta({
 	ogUrl: "https://www.gabriwar.xyz/bc250",
 });
 
-import { STOCK } from "~/utils/bc250/palette.ts";
+import { STOCK, ROLES } from "~/utils/bc250/palette.ts";
 
 const { busy, status, error, info, progress, load, build } = useBc250Bios();
 
@@ -20,11 +20,14 @@ const SAFE_INDEX = 1;
 const dragging = ref(false);
 const filename = ref("");
 const downloadUrl = ref("");
-const advanced = ref(false);
 const acked = ref(false);
 const selected = ref(SAFE_INDEX);
 
 const edits = ref(new Map<number, number>());
+// Indices asked to go back to factory. Kept apart from edits because the two
+// tables have different factory values at 6 and 8 to 14, so this cannot be
+// expressed as one colour written to both.
+const restored = ref(new Set<number>());
 
 const lines = (key: string) => (tm(`bc250.${key}`) as unknown[]).map((l) => rt(l as string));
 const hex = (n: number) => "#" + n.toString(16).padStart(6, "0");
@@ -42,14 +45,59 @@ const pair = (l: string, r: string, w = W - 4) => {
 	return gap < 1 ? pad(l + r, w) : pad(l + " ".repeat(gap) + r, w);
 };
 
-function withEdits(base: number[]): number[] {
+// The swatch is the picker: clicking a colour opens it in place, so there is
+// no separate field to scroll down to and no index to keep in your head.
+function paint(index: number, value: string) {
+	selected.value = index;
+	const next = new Map(edits.value);
+	next.set(index, Number.parseInt(value.slice(1), 16));
+	edits.value = next;
+	const keep = new Set(restored.value);
+	keep.delete(index);
+	restored.value = keep;
+	downloadUrl.value = "";
+}
+
+// Reverting one index at a time, because the interesting mistakes are single
+// colours: you find the body unreadable and want that one back, not the five
+// others you were happy with.
+// Order and emphasis follow what the board actually paints: these eight were
+// each seen on screen, the rest never showed up in any photograph. Putting the
+// ones that do nothing at the end keeps them reachable without inviting a
+// change that cannot be seen.
+const USED = [0, 1, 7, 8, 15, 2, 10, 14];
+const swatchOrder = [...USED, ...Array.from({ length: 16 }, (_, i) => i).filter((i) => !USED.includes(i))];
+
+// Back means the factory value, not whatever the uploaded file carried: on an
+// image someone else already recoloured, that is their choice, not a baseline.
+function revert(index: number) {
+	const next = new Map(edits.value);
+	next.delete(index);
+	edits.value = next;
+	restored.value = new Set(restored.value).add(index);
+	downloadUrl.value = "";
+}
+
+// Everything back to factory in one go, expressed as edits rather than by
+// clearing them: on an image that arrived already recoloured, dropping the
+// edits would restore somebody else's palette, not the board's.
+function resetAll() {
+	edits.value = new Map();
+	restored.value = new Set(Array.from({ length: STOCK.screen.length }, (_, i) => i));
+	downloadUrl.value = "";
+}
+
+const offStock = (index: number) => (previewColors.value[index] ?? 0) !== (STOCK.screen[index] ?? 0);
+
+function withEdits(base: number[], stock: number[]): number[] {
 	const out = [...base];
+	for (const i of restored.value) out[i] = stock[i] ?? 0;
 	for (const [i, c] of edits.value) out[i] = c;
 	return out;
 }
 
-const previewColors = computed(() => withEdits(info.value?.palettes[0]?.colors ?? []));
-const popupColors = computed(() => withEdits(info.value?.palettes[1]?.colors ?? []));
+const previewColors = computed(() => withEdits(info.value?.palettes[0]?.colors ?? [], STOCK.screen));
+const popupColors = computed(() => withEdits(info.value?.palettes[1]?.colors ?? [], STOCK.popups));
 // The factory tables, not the uploaded file's: someone comparing a ROM that
 // was already recoloured needs to see what the board shipped with.
 const originalColors = STOCK.screen;
@@ -89,6 +137,7 @@ async function onFile(file?: File | null) {
 	filename.value = file.name;
 	downloadUrl.value = "";
 	edits.value = new Map();
+	restored.value = new Set();
 	newLogo.value = null;
 	await load(file);
 }
@@ -100,6 +149,7 @@ function onDrop(e: DragEvent) {
 
 function reset() {
 	edits.value = new Map();
+	restored.value = new Set();
 	selected.value = SAFE_INDEX;
 	newLogo.value = null;
 	logoSource.value = null;
@@ -110,7 +160,7 @@ function reset() {
 async function generate() {
 	error.value = "";
 	try {
-		downloadUrl.value = URL.createObjectURL(await build(edits.value, newLogo.value?.bytes));
+		downloadUrl.value = URL.createObjectURL(await build(edits.value, restored.value, newLogo.value?.bytes));
 	} catch (e) {
 		console.error("[bc250] generate", e);
 		error.value = e instanceof Error ? e.message : String(e);
@@ -126,10 +176,15 @@ const logoW = ref(0);
 const logoH = ref(0);
 const logoFill = ref(false);
 
-// Bigger probably works too, this is just the size that was tested.
-const MAX_W = 1024;
-const MAX_H = 768;
-const clamp = (n: number, max: number) => Math.max(16, Math.min(max, Math.round(n) || 16));
+// The ceiling is the panel, not a number invented here: the firmware centres
+// the image at its own pixel size, so past the display mode there is nowhere
+// left to draw. 1024x768 is what has been flashed and booted. 1x1 stays
+// reachable at the bottom, which is how other BC-250 images ship with no
+// splash at all. Whether a given size actually fits is a separate question,
+// measured per image and refused at build time.
+const MAX_W = 1920;
+const MAX_H = 1080;
+const clamp = (n: number, max: number) => Math.max(1, Math.min(max, Math.round(n) || 1));
 
 const onScreen = (w: number) => ({ width: Math.min(100, (w / 1920) * 100) + "%" });
 
@@ -179,6 +234,10 @@ async function renderLogo() {
 }
 
 watch([customSize, logoW, logoH, logoFill], () => {
+	const w = clamp(logoW.value, MAX_W);
+	const h = clamp(logoH.value, MAX_H);
+	if (w !== logoW.value) logoW.value = w;
+	if (h !== logoH.value) logoH.value = h;
 	downloadUrl.value = "";
 	renderLogo();
 });
@@ -360,44 +419,45 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
 
       <div class="ansi-screen">
         <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.palettes")) }}</div>
-        <div v-for="p in info.palettes" :key="p.which" class="pal">
-          <span class="dim-text pal-name">{{ p.which }}</span>
+        <div class="pal">
+          <span class="dim-text pal-name">{{ t("bc250.bothTables") }}</span>
           <span class="swatches">
-            <button
-              v-for="(c, i) in withEdits(p.colors)"
+            <span
+              v-for="i in swatchOrder"
               :key="i"
-              class="sw"
-              :class="{ marked: i === selected, locked: !advanced && i !== SAFE_INDEX }"
-              :style="{ background: hex(c) }"
-              :title="`${i}: ${hex(c)}`"
-              :disabled="!advanced && i !== SAFE_INDEX"
-              @click.prevent="selected = i"
-            >{{ i }}</button>
+              class="swatch"
+              :title="`${i}: ${hex(previewColors[i] ?? 0)} — ${ROLES[i]}`"
+              ><label class="sw-box"><input
+                type="color"
+                class="sw"
+                :class="{ marked: i === selected }"
+                :value="hex(previewColors[i] ?? 0)"
+                @focus="selected = i"
+                @input="paint(i, ($event.target as HTMLInputElement).value)"
+              ></label><span class="sw-i">{{ i }}</span><button
+                class="sw-x"
+                :class="{ on: offStock(i) }"
+                :disabled="!offStock(i)"
+                :title="t('bc250.revert')"
+                @click="revert(i)"
+              >x</button></span>
           </span>
         </div>
         <div class="pal-actions">
-          <button class="link" data-testid="advanced" @click="advanced = !advanced">
-            {{ advanced ? t("bc250.advancedOff") : t("bc250.advanced") }}
-          </button>
+          <button
+            v-if="swatchOrder.some((i) => offStock(i))"
+            class="link"
+            data-testid="reset-all"
+            @click="resetAll"
+          >{{ t("bc250.resetAll") }}</button>
         </div>
         <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
       </div>
 
-      <div v-if="advanced || risky" class="ansi-screen warn" data-testid="warning">
+      <div class="ansi-screen" data-testid="warning">
         <div class="ansi-frame ansi-frame--titled">{{ top("!") }}</div>
         <div v-for="(l, i) in lines('warning')" :key="i" class="ansi-line">
           <span class="row-edge">║ </span><span class="body-text">{{ pad(l) }}</span><span class="row-edge"> ║</span>
-        </div>
-        <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
-      </div>
-
-      <div class="ansi-screen">
-        <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.colour")) }}</div>
-        <div class="picker-row">
-          <span class="dim-text">{{ t("bc250.index") }} {{ selected }}</span>
-          <input v-model="currentColor" type="color" data-testid="picker">
-          <input v-model="currentColor" class="hexin" spellcheck="false">
-          <button v-if="edits.size" class="link" data-testid="reset" @click="reset">{{ t("bc250.reset") }}</button>
         </div>
         <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
       </div>
@@ -408,7 +468,7 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
       <div class="ansi-screen">
         <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.output")) }}</div>
         <div class="actions">
-          <button class="link" :disabled="busy || (!edits.size && !newLogo)" data-testid="generate" @click="generate">
+          <button class="link" :disabled="busy || (!edits.size && !restored.size && !newLogo)" data-testid="generate" @click="generate">
             {{ busy ? status + " ..." : t("bc250.generate") }}
           </button>
           <a
@@ -516,15 +576,66 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
   padding: 8px 16px;
   max-width: 100%;
 }
-.pal-name { flex: none; min-width: 7ch; }
-.swatches { display: flex; gap: 3px; flex: 1; }
-.sw {
-  flex: 1 1 0; min-width: 0; height: 38px; padding: 0;
-  border: 1px solid var(--color-border); cursor: pointer;
-  font-family: inherit; font-size: 0.8rem; color: transparent;
+.pal-name { flex: 0 0 auto; white-space: nowrap; }
+.swatches { display: flex; gap: 7px; flex: 1; justify-content: center; }
+
+.swatch {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  cursor: pointer;
+  flex: 0 0 34px;
 }
+
+.sw-box { display: block; line-height: 0; }
+
+.sw-i {
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--color-text-secondary);
+  font-variant-numeric: tabular-nums;
+}
+
+/* indices nothing on screen uses, kept last and played down */
+.spare { opacity: 0.68; }
+.spare .sw-i { color: var(--color-text-tertiary); }
+
+/* an edited index offers itself back. the slot is always there so the row does
+   not jump when one appears */
+.sw-x {
+  font-family: inherit;
+  font-size: 0.9rem;
+  line-height: 1;
+  background: none;
+  border: none;
+  padding: 0;
+  visibility: hidden;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+}
+
+.sw-x.on { visibility: visible; color: var(--color-text-primary); }
+/* a native colour input paints its swatch inset inside its own chrome, which
+   reads as gaps and doubled edges once they sit side by side */
+.sw {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 34px;
+  min-width: 0;
+  height: 34px;
+  padding: 0;
+  background: none;
+  border: 1px solid var(--color-text-tertiary);
+  cursor: pointer;
+}
+
+.sw::-webkit-color-swatch-wrapper { padding: 0; }
+.sw::-webkit-color-swatch { border: none; }
+.sw::-moz-color-swatch { border: none; }
 .sw.marked { outline: 3px solid var(--color-text-primary); outline-offset: -3px; }
-.sw.locked { cursor: default; opacity: 0.55; }
 
 .drop { cursor: pointer; }
 .drop input { display: none; }
@@ -606,10 +717,6 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
   align-items: flex-start;
 }
 
-input[type="color"] {
-  width: 64px; height: 36px; padding: 0;
-  background: none; border: 1px solid var(--color-border);
-}
 .hexin {
   background: var(--color-background); color: var(--color-text-primary);
   border: 1px solid var(--color-border); font-family: inherit;

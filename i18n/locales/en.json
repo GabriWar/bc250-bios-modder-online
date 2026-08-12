@@ -994,19 +994,15 @@
 		"slack": "room to grow",
 		"volumeFree": "free inside volume",
 		"slackNote": "slack is measured from this file, not assumed",
-		"palettes": "palettes",
-		"colour": "colour",
-		"index": "index",
+		"palettes": "palette",
 		"reset": "[ reset ]",
-		"advanced": "[ edit every index ]",
-		"advancedOff": "[ only the blue ]",
 		"warning": [
-			"index 1 is the safe one: it is the menu text and the",
-			"default dialog background, and nothing else depends",
-			"on it. the others carry structure: 7 is the body",
-			"background and 0 is the help text, and taking both",
-			"dark leaves the help unreadable. change them only if",
-			"you are ready to reflash."
+			"every index is editable, but only a few change anything",
+			"you will see. 0 paints section headings, the boot screen",
+			"and the shell. 1 is the body text and the dialog behind",
+			"it. 7 is the screen. 8 is the read-only fields, 15 the",
+			"editable values. keep each pair readable against the",
+			"other and use 'show the original' before you flash."
 		],
 		"preview": "preview",
 		"output": "output",
@@ -1032,9 +1028,10 @@
 		"logoSizeCustom": "[ try another size ]",
 		"logoSizeNote": [
 			"the firmware centres the logo at its own pixel size and",
-			"does not scale it, so a bigger canvas is the only way to",
-			"get a bigger logo. capped at 1024x768, which is the size",
-			"tested on real hardware."
+			"does not scale it, so the canvas is the only thing that",
+			"decides how big it lands. 1024x768 is tested; beyond that",
+			"the build refuses if it no longer fits the volume. 1x1 is",
+			"how other images ship with no splash at all."
 		],
 		"logoFill": "fill the canvas (crops to fit)",
 		"logoNew": "new",
@@ -1044,6 +1041,9 @@
 		"reviewHint": "click 'show the original' to compare before you confirm",
 		"contrastAck": "i checked the contrast by clicking the previews above, and every screen is still readable",
 		"blocked": "tick both boxes to unlock the download",
-		"compareBack": "[ back to yours ]"
+		"compareBack": "[ back to yours ]",
+		"bothTables": "colors:",
+		"revert": "click to undo this one",
+		"resetAll": "[ all back to factory ]"
 	}
 }
