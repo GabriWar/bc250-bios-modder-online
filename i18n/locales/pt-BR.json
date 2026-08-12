@@ -1061,14 +1061,11 @@
 		"foreground": "frente",
 		"onBackground": "sobre o fundo",
 		"umaTitle": "carveout de memoria",
-		"umaEnable": "quero digitar o tamanho da UMA em vez de escolher da lista",
-		"umaAlready": "esta imagem ja aceita valor digitado",
+		"umaEnable": "tornar digitavel",
+		"umaAlready": "ja e digitavel",
 		"umaNote": [
-			"o UMA frame buffer e um dropdown de tamanhos fixos. a",
-			"pergunta por baixo esta a um byte de virar um campo de",
-			"digitar, limitado a 15360 MB pra um dedo errado nao",
-			"pedir mais memoria do que a placa tem. testado em",
-			"hardware: digitar 13312 devolveu 3072 MB pro sistema."
+			"digite o tamanho da UMA em vez de escolher da lista.",
+			"limitado a 15360 MB. testado em hardware."
 		]
 	}
 }
