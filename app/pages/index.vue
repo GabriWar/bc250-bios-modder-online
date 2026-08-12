@@ -61,11 +61,10 @@ function paint(index: number, value: string) {
 // Reverting one index at a time, because the interesting mistakes are single
 // colours: you find the body unreadable and want that one back, not the five
 // others you were happy with.
-// Order and emphasis follow what the board actually paints: these eight were
-// each seen on screen, the rest never showed up in any photograph. Putting the
-// ones that do nothing at the end keeps them reachable without inviting a
-// change that cannot be seen.
-const USED = [0, 1, 7, 8, 15, 2, 10, 14];
+// Order and emphasis follow what the board itself paints. 2 sits with the rest
+// even though it is not idle: it tints the boot manager's selected row, which
+// is somebody else's program rather than this firmware.
+const USED = [0, 1, 7, 8, 15, 10, 14];
 const SPARE = Array.from({ length: 16 }, (_, i) => i).filter((i) => !USED.includes(i));
 const efiUnlocked = ref(false);
 
