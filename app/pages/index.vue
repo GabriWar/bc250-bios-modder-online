@@ -130,6 +130,54 @@ const bar = computed(() => {
 	return "█".repeat(on) + "░".repeat(BAR - on) + " " + String(Math.round(progress.value * 100)).padStart(3) + "%";
 });
 
+// Contrast is checked on the pairs the board actually draws, taken from the
+// attribute map: a palette can look fine as sixteen squares and still put text
+// on a background it cannot be read against. Index 0 is the usual casualty,
+// since it is a background almost everywhere and text in exactly one place.
+const PAIRS: { fg: number; bg: number; what: string }[] = [
+	{ fg: 1, bg: 7, what: "bodyText" },
+	{ fg: 0, bg: 7, what: "headings" },
+	{ fg: 8, bg: 7, what: "readOnly" },
+	{ fg: 15, bg: 7, what: "values" },
+	{ fg: 15, bg: 1, what: "titleBar" },
+	{ fg: 7, bg: 1, what: "footer" },
+	{ fg: 15, bg: 0, what: "console" },
+];
+
+function luminance(rgb: number): number {
+	const ch = (v: number) => {
+		const s = v / 255;
+		return s <= 0.03928 ? s / 12.92 : ((s + 0.055) / 1.055) ** 2.4;
+	};
+	return 0.2126 * ch((rgb >> 16) & 255) + 0.7152 * ch((rgb >> 8) & 255) + 0.0722 * ch(rgb & 255);
+}
+
+function ratio(a: number, b: number): number {
+	const la = luminance(a);
+	const lb = luminance(b);
+	return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+}
+
+// The index number is shown as a chip of its own colour, with the text flipped
+// to whichever of black or white stays legible on it: naming a colour in that
+// same colour is how you get an invisible label.
+function chip(index: number) {
+	const rgb = previewColors.value[index] ?? 0;
+	return {
+		background: hex(rgb),
+		color: luminance(rgb) > 0.4 ? "#000000" : "#ffffff",
+	};
+}
+
+const contrastProblems = computed(() =>
+	PAIRS.map((p) => ({
+		...p,
+		r: ratio(previewColors.value[p.fg] ?? 0, previewColors.value[p.bg] ?? 0),
+	}))
+		.filter((p) => p.r < 3)
+		.sort((a, b) => a.r - b.r),
+);
+
 const risky = computed(() => [...edits.value.keys()].some((i) => i !== SAFE_INDEX));
 
 async function onFile(file?: File | null) {
@@ -503,6 +551,23 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
       <Bc250Screen :colors="shown" :popup-colors="shownPopup" />
       <Bc250Console :colors="shown" />
 
+      <div v-if="contrastProblems.length" class="ansi-screen warn" data-testid="contrast-warn">
+        <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.contrastTitle")) }}</div>
+        <div v-for="p in contrastProblems" :key="p.what" class="warn-row">
+          <span
+            class="sample"
+            :style="{ background: hex(previewColors[p.bg] ?? 0), color: hex(previewColors[p.fg] ?? 0) }"
+          >{{ t("bc250.pair." + p.what) }}</span>
+          <span class="body-text">{{ t("bc250.foreground") }}</span>
+          <span class="idx" :style="chip(p.fg)">{{ p.fg }}</span>
+          <span class="body-text">{{ t("bc250.onBackground") }}</span>
+          <span class="idx" :style="chip(p.bg)">{{ p.bg }}</span>
+          <span class="body-text">{{ p.r.toFixed(2) }}:1</span>
+          <span class="body-text">{{ t("bc250.hardToRead") }}</span>
+        </div>
+        <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
+      </div>
+
       <div class="ansi-screen">
         <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.output")) }}</div>
         <div class="actions">
@@ -618,6 +683,37 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
   width: 0;
   min-width: 100%;
 }
+.warn-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 4px 16px;
+  width: 0;
+  min-width: 100%;
+  font-size: 1.1rem;
+  flex-wrap: wrap;
+}
+
+.idx {
+  padding: 2px 8px;
+  flex: none;
+  border: 1px solid var(--color-text-tertiary);
+  font-variant-numeric: tabular-nums;
+}
+
+.sample {
+  padding: 3px 10px;
+  flex: none;
+  border: 1px solid var(--color-text-tertiary);
+}
+
+.chip {
+  width: 26px;
+  height: 20px;
+  flex: none;
+  border: 1px solid var(--color-text-tertiary);
+}
+
 .pal-name { flex: 0 0 13ch; white-space: nowrap; }
 .swatches { display: flex; gap: 7px; flex: 1; justify-content: center; }
 

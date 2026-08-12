@@ -1046,6 +1046,19 @@
 		"resetAll": "[ tudo pro de fabrica ]",
 		"groupBios": "bios/shell:",
 		"groupEfi": "efi text: ",
-		"editEfi": "editar efi text? pode causar mudancas estranhas e nada disso aparece nas previas acima"
+		"editEfi": "editar efi text? pode causar mudancas estranhas e nada disso aparece nas previas acima",
+		"contrastTitle": "contraste",
+		"hardToRead": "contraste dificil de ler",
+		"pair": {
+			"bodyText": "texto do menu sobre a tela",
+			"headings": "cabecalhos de secao",
+			"readOnly": "campos so-leitura",
+			"values": "valores editaveis",
+			"titleBar": "texto da barra de titulo",
+			"footer": "texto do rodape",
+			"console": "texto do console e do shell"
+		},
+		"foreground": "frente",
+		"onBackground": "sobre o fundo"
 	}
 }
