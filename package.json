@@ -1,0 +1,13 @@
+{
+	"name": "bc250-bios-modder-online",
+	"version": "1.0.0",
+	"description": "Read and edit AMD BC-250 BIOS images: menu palettes and boot logo",
+	"type": "module",
+	"main": "src/index.ts",
+	"exports": { ".": "./src/index.ts" },
+	"files": ["src"],
+	"keywords": ["bc250", "uefi", "bios", "firmware", "amd", "oberon"],
+	"license": "MIT",
+	"peerDependencies": { "lzma-wasm": "^1.0.7" },
+	"devDependencies": { "lzma-wasm": "^1.0.7" }
+}

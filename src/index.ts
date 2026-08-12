@@ -1,0 +1,33 @@
+export {
+	openContainer,
+	sealContainer,
+	measureBudget,
+	walkVolume,
+	walkSections,
+	guidAt,
+	moduleBody,
+	rawBody,
+	MODULES,
+	LZMA_SECTION_GUID,
+	SEC_RAW,
+	SEC_GUID_DEFINED,
+	type Container,
+	type Budget,
+	type FfsFile,
+	type Section,
+	type Lzma,
+} from "./firmware.ts";
+
+export {
+	findPalettes,
+	setColor,
+	setColorEverywhere,
+	findLogo,
+	replaceLogo,
+	imageSize,
+	PALETTE_SIZE,
+	ROLES,
+	type PaletteRef,
+	type Logo,
+	type ImageFormat,
+} from "./palette.ts";
