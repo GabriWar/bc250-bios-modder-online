@@ -1,0 +1,65 @@
+{
+	"bc250": {
+		"title": "bc250 bios recolour",
+		"intro": [
+			"repinta as cores que a BIOS da AMD BC-250 usa nos",
+			"menus e nas caixas de dialogo. roda inteiro no seu",
+			"navegador, a ROM nao e enviada pra lugar nenhum."
+		],
+		"input": "entrada",
+		"drop": "solte uma .ROM aqui, ou clique pra escolher",
+		"error": "erro",
+		"image": "imagem",
+		"revision": "revisao",
+		"files": "arquivos no volume DXE",
+		"compressed": "volume comprimido",
+		"slack": "espaco pra crescer",
+		"volumeFree": "livre dentro do volume",
+		"slackNote": "a folga e medida deste arquivo, nao presumida",
+		"palettes": "paletas",
+		"colour": "cor",
+		"index": "indice",
+		"reset": "[ desfazer ]",
+		"advanced": "[ editar todos os indices ]",
+		"advancedOff": "[ so o azul ]",
+		"warning": [
+			"o indice 1 e o seguro: e o texto do menu e o fundo",
+			"padrao dos dialogos, e nada mais depende dele. os",
+			"outros carregam estrutura: o 7 e o fundo do corpo",
+			"e o 0 e o texto de ajuda, e escurecer os dois deixa",
+			"a ajuda ilegivel. so mexa se estiver disposto a",
+			"regravar."
+		],
+		"preview": "previa",
+		"output": "saida",
+		"generate": "[ gerar ]",
+		"download": "[ baixar ]",
+		"verifyNote": "o resultado e reaberto e conferido antes do download",
+		"logo": "logo de boot",
+		"logoSize": "atual",
+		"logoBudget": "orcamento",
+		"logoPick": "[ escolher imagem ]",
+		"logoChange": "[ trocar imagem ]",
+		"riskTitle": "leia antes",
+		"risk": [
+			"voce esta modificando uma BIOS por sua conta e risco.",
+			"queda de energia no meio do flash ou revisao errada de",
+			"placa deixam a maquina morta ate voce regravar o chip",
+			"por fora. nao faca isso sem um gravador em maos."
+		],
+		"ack": "tenho um CH341A (ou gravador SPI equivalente) e assumo a responsabilidade por qualquer brick",
+		"ackHint": "marque pra liberar o download",
+		"logoSizeLabel": "canvas",
+		"logoSizeKeep": "[ manter o original ]",
+		"logoSizeCustom": "[ tentar outro tamanho ]",
+		"logoSizeNote": [
+			"o firmware centraliza a logo no tamanho em pixels dela e",
+			"nao escala, entao canvas maior e o unico jeito de ter logo",
+			"maior. limitado a 1024x768, que e o tamanho testado em",
+			"hardware de verdade."
+		],
+		"logoFill": "preencher o canvas (corta o que sobra)",
+		"logoNew": "nova",
+		"logoScreen": "como fica numa tela 1080p"
+	}
+}

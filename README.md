@@ -44,6 +44,24 @@ of raw sections walks straight past it. Both PNG and JPEG are read, and
 `Logo.format` tells you which the image carries. Write back the same one: each
 board only carries the decoder for the format it shipped with.
 
+## What is in here
+
+```
+src/         the parser. plain TypeScript, no framework, runs anywhere
+ui/          the actual page from gabriwar.xyz/bc250, verbatim
+examples/    a CLI that recolours and swaps the logo from node
+```
+
+`src/` and `ui/` are byte-for-byte what the hosted site runs, not a
+reimplementation. The `ui/` files are Nuxt-flavoured: they lean on auto-imports
+(`ref`, `computed`, `useI18n`) and resolve the parser through the `~/utils/bc250`
+alias, so dropping them into a bare Vue app means wiring those up. `src/` has no
+such baggage.
+
+The ANSI look is all in the page's own `<style scoped>`, apart from the pixel
+checkbox in `ui/components/SCheckbox.vue`, which reads `--s-*` custom properties
+from the site theme.
+
 ## Use
 
 ```js

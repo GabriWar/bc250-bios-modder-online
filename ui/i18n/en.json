@@ -1,0 +1,65 @@
+{
+	"bc250": {
+		"title": "bc250 bios recolour",
+		"intro": [
+			"repaints the colours the AMD BC-250 BIOS uses for",
+			"its menus and dialogs. runs entirely in your browser",
+			"the ROM is never uploaded anywhere."
+		],
+		"input": "input",
+		"drop": "drop a .ROM here, or click to pick one",
+		"error": "error",
+		"image": "image",
+		"revision": "revision",
+		"files": "files in DXE volume",
+		"compressed": "compressed volume",
+		"slack": "room to grow",
+		"volumeFree": "free inside volume",
+		"slackNote": "slack is measured from this file, not assumed",
+		"palettes": "palettes",
+		"colour": "colour",
+		"index": "index",
+		"reset": "[ reset ]",
+		"advanced": "[ edit every index ]",
+		"advancedOff": "[ only the blue ]",
+		"warning": [
+			"index 1 is the safe one: it is the menu text and the",
+			"default dialog background, and nothing else depends",
+			"on it. the others carry structure: 7 is the body",
+			"background and 0 is the help text, and taking both",
+			"dark leaves the help unreadable. change them only if",
+			"you are ready to reflash."
+		],
+		"preview": "preview",
+		"output": "output",
+		"generate": "[ generate ]",
+		"download": "[ download ]",
+		"verifyNote": "the result is reopened and checked before download",
+		"logo": "boot logo",
+		"logoSize": "current",
+		"logoBudget": "budget",
+		"logoPick": "[ pick an image ]",
+		"logoChange": "[ change image ]",
+		"riskTitle": "read this first",
+		"risk": [
+			"you are modding a BIOS at your own risk. a power cut",
+			"mid-flash or the wrong board revision leaves the machine",
+			"dead until you reflash the chip externally. do not do this",
+			"without a hardware programmer on hand."
+		],
+		"ack": "i have a CH341A (or equivalent SPI programmer) and i take responsibility for any brick",
+		"ackHint": "tick this to unlock the download",
+		"logoSizeLabel": "canvas",
+		"logoSizeKeep": "[ keep original ]",
+		"logoSizeCustom": "[ try another size ]",
+		"logoSizeNote": [
+			"the firmware centres the logo at its own pixel size and",
+			"does not scale it, so a bigger canvas is the only way to",
+			"get a bigger logo. capped at 1024x768, which is the size",
+			"tested on real hardware."
+		],
+		"logoFill": "fill the canvas (crops to fit)",
+		"logoNew": "new",
+		"logoScreen": "as it lands on a 1080p screen"
+	}
+}
