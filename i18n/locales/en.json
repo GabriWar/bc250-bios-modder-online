@@ -1044,6 +1044,9 @@
 		"compareBack": "[ back to yours ]",
 		"bothTables": "colors:",
 		"revert": "click to undo this one",
-		"resetAll": "[ all back to factory ]"
+		"resetAll": "[ all back to factory ]",
+		"groupBios": "bios/shell:",
+		"groupEfi": "efi text: ",
+		"editEfi": "edit efi text? it can cause odd changes and none of it shows on the previews above"
 	}
 }

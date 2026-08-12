@@ -1044,6 +1044,9 @@
 		"compareBack": "[ voltar pra sua ]",
 		"bothTables": "cores:",
 		"revert": "clique pra desfazer so esta",
-		"resetAll": "[ tudo pro de fabrica ]"
+		"resetAll": "[ tudo pro de fabrica ]",
+		"groupBios": "bios/shell:",
+		"groupEfi": "efi text: ",
+		"editEfi": "editar efi text? pode causar mudancas estranhas e nada disso aparece nas previas acima"
 	}
 }

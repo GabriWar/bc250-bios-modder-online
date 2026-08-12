@@ -49,3 +49,56 @@ html, body {
 }
 
 .home-link:hover { color: var(--color-text-primary); }
+
+/* the pixel checkbox, lifted from the site so it does not fall back to the
+   browser's own control here */
+.s-check {
+	display: inline-flex;
+	align-items: center;
+	gap: 1ch;
+	font-family: var(--font-mono);
+	color: var(--s-fg);
+	cursor: pointer;
+	user-select: none;
+}
+.s-check input {
+	position: absolute;
+	opacity: 0;
+	pointer-events: none;
+}
+.s-check__box {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 1.4em;
+	height: 1.4em;
+	background: var(--s-bg);
+	box-shadow: inset 0 0 0 2px var(--s-border-strong);
+	color: var(--s-accent);
+	font-weight: 700;
+	flex-shrink: 0;
+}
+.s-check__box::before {
+	content: "";
+	font-family: var(--font-mono);
+	line-height: 1;
+}
+.s-check input:checked ~ .s-check__box {
+	background: var(--s-accent);
+	color: var(--s-bg);
+	box-shadow: inset 0 0 0 2px var(--s-accent);
+}
+.s-check input:checked ~ .s-check__box::before { content: "x"; }
+.s-check--radio .s-check__box { border-radius: 50%; box-shadow: inset 0 0 0 2px var(--s-border-strong); }
+.s-check--radio input:checked ~ .s-check__box { background: var(--s-bg); box-shadow: inset 0 0 0 2px var(--s-accent); }
+.s-check--radio input:checked ~ .s-check__box::before {
+	content: "";
+	width: 0.7em;
+	height: 0.7em;
+	border-radius: 50%;
+	background: var(--s-accent);
+}
+.s-check input:focus-visible ~ .s-check__box {
+	outline: 2px solid var(--s-accent);
+	outline-offset: 2px;
+}

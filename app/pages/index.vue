@@ -66,7 +66,8 @@ function paint(index: number, value: string) {
 // ones that do nothing at the end keeps them reachable without inviting a
 // change that cannot be seen.
 const USED = [0, 1, 7, 8, 15, 2, 10, 14];
-const swatchOrder = [...USED, ...Array.from({ length: 16 }, (_, i) => i).filter((i) => !USED.includes(i))];
+const SPARE = Array.from({ length: 16 }, (_, i) => i).filter((i) => !USED.includes(i));
+const efiUnlocked = ref(false);
 
 // Back means the factory value, not whatever the uploaded file carried: on an
 // image someone else already recoloured, that is their choice, not a baseline.
@@ -420,10 +421,10 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
       <div class="ansi-screen">
         <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.palettes")) }}</div>
         <div class="pal">
-          <span class="dim-text pal-name">{{ t("bc250.bothTables") }}</span>
+          <span class="dim-text pal-name">{{ t("bc250.groupBios") }}</span>
           <span class="swatches">
             <span
-              v-for="i in swatchOrder"
+              v-for="i in USED"
               :key="i"
               class="swatch"
               :title="`${i}: ${hex(previewColors[i] ?? 0)} — ${ROLES[i]}`"
@@ -443,9 +444,37 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
               >x</button></span>
           </span>
         </div>
+        <div class="pal">
+          <span class="dim-text pal-name">{{ t("bc250.groupEfi") }}</span>
+          <span class="swatches">
+            <span
+              v-for="i in SPARE"
+              :key="i"
+              class="swatch"
+              :title="`${i}: ${hex(previewColors[i] ?? 0)} — ${ROLES[i]}`"
+              ><label class="sw-box"><input
+                type="color"
+                class="sw"
+                :disabled="!efiUnlocked"
+                :class="{ marked: i === selected }"
+                :value="hex(previewColors[i] ?? 0)"
+                @focus="selected = i"
+                @input="paint(i, ($event.target as HTMLInputElement).value)"
+              ></label><span class="sw-i">{{ i }}</span><button
+                class="sw-x"
+                :class="{ on: offStock(i) }"
+                :disabled="!offStock(i)"
+                :title="t('bc250.revert')"
+                @click="revert(i)"
+              >x</button></span>
+          </span>
+        </div>
+        <div class="pal-actions">
+          <SCheckbox v-model="efiUnlocked" class="tick" data-testid="efi">{{ t("bc250.editEfi") }}</SCheckbox>
+        </div>
         <div class="pal-actions">
           <button
-            v-if="swatchOrder.some((i) => offStock(i))"
+            v-if="[...USED, ...SPARE].some((i) => offStock(i))"
             class="link"
             data-testid="reset-all"
             @click="resetAll"
@@ -576,7 +605,7 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
   padding: 8px 16px;
   max-width: 100%;
 }
-.pal-name { flex: 0 0 auto; white-space: nowrap; }
+.pal-name { flex: 0 0 13ch; white-space: nowrap; }
 .swatches { display: flex; gap: 7px; flex: 1; justify-content: center; }
 
 .swatch {
@@ -708,6 +737,23 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
   .actions.blink,
   .link.blink { animation: none; outline: 2px solid var(--color-text-primary); }
 }
+
+/* the pixel checkbox is drawn with an inset shadow, which at this type size
+   comes out as a hairline; thicker and squarer reads like the rest of the page */
+.tick :deep(.s-check__box) {
+  width: 1.15em;
+  height: 1.15em;
+  box-shadow: inset 0 0 0 3px var(--color-text-primary);
+  border-radius: 0;
+}
+
+.tick :deep(input:checked ~ .s-check__box) {
+  background: var(--color-text-primary);
+  box-shadow: inset 0 0 0 3px var(--color-text-primary);
+  color: var(--color-background);
+}
+
+.tick :deep(.s-check__box::before) { font-weight: 700; font-size: 0.9em; }
 
 .tick {
   white-space: normal;
