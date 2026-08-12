@@ -194,16 +194,27 @@ async function onLogo(file?: File | null) {
 	await renderLogo();
 }
 
+// Falls back to the logo already in the ROM, so the canvas can be resized
+// without picking a new picture: wanting the existing splash bigger is a
+// perfectly ordinary thing to want.
+async function sourceBitmap(): Promise<ImageBitmap | null> {
+	if (logoSource.value) return await createImageBitmap(logoSource.value);
+	const url = info.value?.logo?.url;
+	if (!url) return null;
+	return await createImageBitmap(await (await fetch(url)).blob());
+}
+
 async function renderLogo() {
-	const src = logoSource.value;
-	if (!src || !info.value?.logo) return;
+	if (!info.value?.logo) return;
+	if (!logoSource.value && !customSize.value) return;
 	logoError.value = "";
 	// The other format probably works, but stick to the one the ROM ships.
 	const { format } = info.value.logo;
 	const width = customSize.value ? clamp(logoW.value, MAX_W) : info.value.logo.width;
 	const height = customSize.value ? clamp(logoH.value, MAX_H) : info.value.logo.height;
 	try {
-		const bitmap = await createImageBitmap(src);
+		const bitmap = await sourceBitmap();
+		if (!bitmap) return;
 		const canvas = document.createElement("canvas");
 		canvas.width = width;
 		canvas.height = height;
@@ -363,7 +374,6 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
         <div v-for="(row, i) in imageRows" :key="i" class="ansi-line">
           <span class="row-edge">║ </span><span class="body-text">{{ row }}</span><span class="row-edge"> ║</span>
         </div>
-        <div class="ansi-line"><span class="row-edge">║ </span><span class="dim-text">{{ pad(t("bc250.slackNote")) }}</span><span class="row-edge"> ║</span></div>
         <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
       </div>
 
@@ -599,10 +609,14 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
 .body-text { color: var(--color-text-primary); }
 .dim-text { color: var(--color-text-secondary); }
 
+/* The box sizes itself to its widest child, and these rows hold widgets rather
+   than text. Letting them count would stretch the box past the 62 characters
+   the border is drawn with, leaving it visibly short. */
 .pal, .picker-row, .logo-row, .pal-actions, .actions {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
   padding: 8px 16px;
-  max-width: 100%;
+  width: 0;
+  min-width: 100%;
 }
 .pal-name { flex: 0 0 13ch; white-space: nowrap; }
 .swatches { display: flex; gap: 7px; flex: 1; justify-content: center; }
@@ -679,7 +693,8 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
   justify-content: center;
   gap: 20px;
   padding: 12px 16px;
-  max-width: 100%;
+  width: 0;
+  min-width: 100%;
 }
 
 .preview {

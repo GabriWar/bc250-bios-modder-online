@@ -993,7 +993,6 @@
 		"compressed": "volume comprimido",
 		"slack": "espaco pra crescer",
 		"volumeFree": "livre dentro do volume",
-		"slackNote": "a folga e medida deste arquivo, nao presumida",
 		"palettes": "paleta",
 		"reset": "[ desfazer ]",
 		"warning": [
