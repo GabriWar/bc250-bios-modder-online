@@ -1,4 +1,7 @@
 node_modules
+.nuxt
+.output
+.logs
 *.ROM
 *.rom
 *.dump/

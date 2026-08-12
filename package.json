@@ -1,13 +1,31 @@
 {
 	"name": "bc250-bios-modder-online",
 	"version": "1.0.0",
-	"description": "Read and edit AMD BC-250 BIOS images: menu palettes and boot logo",
+	"description": "Edit AMD BC-250 BIOS menu palettes and boot logo, entirely in the browser",
 	"type": "module",
-	"main": "src/index.ts",
-	"exports": { ".": "./src/index.ts" },
-	"files": ["src"],
-	"keywords": ["bc250", "uefi", "bios", "firmware", "amd", "oberon"],
+	"private": false,
+	"exports": {
+		".": "./app/utils/bc250/index.ts"
+	},
+	"scripts": {
+		"dev": "nuxt dev",
+		"build": "nuxt build",
+		"generate": "nuxt generate",
+		"preview": "nuxt preview"
+	},
+	"keywords": [
+		"bc250",
+		"uefi",
+		"bios",
+		"firmware",
+		"amd",
+		"oberon"
+	],
 	"license": "MIT",
-	"peerDependencies": { "lzma-wasm": "^1.0.7" },
-	"devDependencies": { "lzma-wasm": "^1.0.7" }
+	"dependencies": {
+		"@nuxtjs/i18n": "^10.2.1",
+		"lzma-wasm": "^1.0.7",
+		"nuxt": "^4.2.1",
+		"vue": "^3.5.0"
+	}
 }

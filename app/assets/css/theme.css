@@ -1,0 +1,51 @@
+:root {
+	--color-background: #ffffff;
+	--color-border: #e5e7eb;
+	--color-text-primary: #111827;
+	--color-text-secondary: #6b7280;
+	--color-text-tertiary: #9ca3af;
+	--color-primary: #3b82f6;
+	--font-mono: "Cozette", "Courier New", Courier, "Lucida Console", Monaco, monospace;
+
+	--s-fg: var(--color-text-primary);
+	--s-bg: var(--color-background);
+	--s-accent: var(--color-primary);
+	--s-border-strong: color-mix(in srgb, var(--s-fg) 60%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
+	:root {
+		--color-background: #000000;
+		--color-border: #1a1a1a;
+		--color-text-primary: #ffffff;
+		--color-text-secondary: #a3a3a3;
+		--color-text-tertiary: #737373;
+		--color-primary: #60a5fa;
+	}
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+	margin: 0;
+	padding: 0;
+	background: var(--color-background);
+	color: var(--color-text-primary);
+	font-family: var(--font-mono);
+}
+
+.home-link {
+	position: fixed;
+	right: 16px;
+	bottom: 12px;
+	z-index: 20;
+	font-family: var(--font-mono);
+	font-size: 1.1rem;
+	color: var(--color-text-secondary);
+	background: var(--color-background);
+	border: 1px solid var(--color-border);
+	padding: 6px 12px;
+	text-decoration: none;
+}
+
+.home-link:hover { color: var(--color-text-primary); }

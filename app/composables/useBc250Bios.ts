@@ -105,7 +105,7 @@ export function useBc250Bios() {
 				logo,
 			};
 			status.value = "";
-			progress.value = 1;
+			progress.value = 0;
 		} catch (e) {
 			error.value = e instanceof Error ? e.message : String(e);
 			container = null;

@@ -44,23 +44,28 @@ of raw sections walks straight past it. Both PNG and JPEG are read, and
 `Logo.format` tells you which the image carries. Write back the same one: each
 board only carries the decoder for the format it shipped with.
 
-## What is in here
+## Run it
 
 ```
-src/         the parser. plain TypeScript, no framework, runs anywhere
-ui/          the actual page from gabriwar.xyz/bc250, verbatim
-examples/    a CLI that recolours and swaps the logo from node
+bun install
+bun run dev
 ```
 
-`src/` and `ui/` are byte-for-byte what the hosted site runs, not a
-reimplementation. The `ui/` files are Nuxt-flavoured: they lean on auto-imports
-(`ref`, `computed`, `useI18n`) and resolve the parser through the `~/utils/bc250`
-alias, so dropping them into a bare Vue app means wiring those up. `src/` has no
-such baggage.
+The tool is the index page. It is the same code serving gabriwar.xyz/bc250, not
+a reimplementation, wrapped in the smallest Nuxt app that will host it.
 
-The ANSI look is all in the page's own `<style scoped>`, apart from the pixel
-checkbox in `ui/components/SCheckbox.vue`, which reads `--s-*` custom properties
-from the site theme.
+```
+app/utils/bc250/   the parser. plain TypeScript, no framework, usable on its own
+app/pages/         the tool
+app/components/    the mock Setup screen and the pixel checkbox
+i18n/locales/      English and Portuguese
+examples/          a CLI that recolours and swaps the logo from node
+```
+
+The ANSI frame is 62 cells of literal box-drawing text, so it cannot reflow. The
+page measures the advance width of whichever mono font actually resolved and
+sizes the type to fit; a fixed ratio looks right until it meets a machine with a
+different font installed.
 
 ## Use
 

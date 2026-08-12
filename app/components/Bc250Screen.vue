@@ -78,10 +78,11 @@ const help = [
 <style scoped>
 .screen {
   font-family: 'Cozette', 'Courier New', monospace;
-  font-size: 18px;
+  font-size: min(18px, calc((100vw - 28px) / 46.8));
   line-height: 1.35;
+  max-width: 100%;
   padding: 6px 0;
-  overflow-x: auto;
+  overflow: clip;
   border: 1px solid #1e1e1e;
 }
 .line { white-space: pre; }

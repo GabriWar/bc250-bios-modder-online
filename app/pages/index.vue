@@ -177,11 +177,35 @@ watch(info, () => {
 	logoH.value = info.value?.logo?.height ?? 0;
 });
 
+
+const ansiFont = ref("1.5rem");
+
+/* The frame is 62 monospace cells of literal text, so the box can only fit if
+   the type does. The advance width is whatever font actually resolved, which
+   differs per machine, so it gets measured instead of assumed. */
+function fitAnsi() {
+	const probe = document.createElement("span");
+	probe.style.cssText = "position:absolute;visibility:hidden;white-space:pre;font-size:100px;font-family:var(--font-mono)";
+	probe.textContent = "0".repeat(62);
+	document.body.appendChild(probe);
+	const per = probe.getBoundingClientRect().width / 100;
+	probe.remove();
+	if (!per) return;
+	const room = document.documentElement.clientWidth - 32;
+	ansiFont.value = Math.min(24, Math.floor((room / per) * 100) / 100) + "px";
+}
+
+onMounted(() => {
+	fitAnsi();
+	window.addEventListener("resize", fitAnsi);
+});
+onBeforeUnmount(() => window.removeEventListener("resize", fitAnsi));
+
 const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_recoloured.ROM");
 </script>
 
 <template>
-  <div class="ansi-page">
+  <div class="ansi-page" :style="{ '--ansi-font': ansiFont }">
     <div class="ansi-screen">
       <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.title")) }}</div>
       <div class="ansi-line"><span class="row-edge">║ </span><span class="body-text">{{ pad("") }}</span><span class="row-edge"> ║</span></div>
@@ -347,7 +371,7 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
         <div v-if="downloadUrl && !acked" class="ansi-line">
           <span class="row-edge">║ </span><span class="dim-text">{{ pad("  " + t("bc250.ackHint")) }}</span><span class="row-edge"> ║</span>
         </div>
-        <div v-if="busy || progress > 0" class="ansi-line" data-testid="progress">
+        <div class="ansi-line" data-testid="progress">
           <span class="row-edge">║ </span><span class="body-text">{{ pad(bar) }}</span><span class="row-edge"> ║</span>
         </div>
         <div class="ansi-line"><span class="row-edge">║ </span><span class="dim-text">{{ pad(t("bc250.verifyNote")) }}</span><span class="row-edge"> ║</span></div>
@@ -376,7 +400,7 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
   font-family: var(--font-mono);
   background: var(--color-background);
   color: var(--color-text-primary);
-  font-size: 1.5rem;
+  font-size: var(--ansi-font, 1.5rem);
   font-weight: 400;
   line-height: 1;
   letter-spacing: 0;
@@ -389,7 +413,7 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
   white-space: pre;
   width: max-content;
   max-width: 100%;
-  overflow-x: auto;
+  overflow: clip;
   box-shadow:
     0 0 0 2px var(--color-border),
     6px 6px 0 var(--color-border);
@@ -410,6 +434,7 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
 .pal, .picker-row, .logo-row, .pal-actions, .actions {
   display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
   padding: 8px 16px;
+  max-width: 100%;
 }
 .pal-name { flex: none; min-width: 7ch; }
 .swatches { display: flex; gap: 3px; flex: 1; }
@@ -435,6 +460,7 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
   justify-content: center;
   gap: 20px;
   padding: 12px 16px;
+  max-width: 100%;
 }
 
 .preview {
@@ -443,7 +469,8 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
   flex-direction: column;
   align-items: center;
   gap: 8px;
-  flex: 1 1 340px;
+  flex: 1 1 min(340px, 100%);
+  min-width: 0;
   max-width: 520px;
 }
 
@@ -477,7 +504,7 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
    and pushes the frame wider than its own border */
 .tick {
   white-space: normal;
-  max-width: 46ch;
+  max-width: min(46ch, 100%);
   font-size: 1.1rem;
   color: var(--color-text-secondary);
   align-items: flex-start;
