@@ -417,6 +417,14 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
         </div>
         <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
       </div>
+      <div class="ansi-screen" data-testid="warning">
+        <div class="ansi-frame ansi-frame--titled">{{ top("!") }}</div>
+        <div v-for="(l, i) in lines('warning')" :key="i" class="ansi-line">
+          <span class="row-edge">║ </span><span class="body-text">{{ pad(l) }}</span><span class="row-edge"> ║</span>
+        </div>
+        <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
+      </div>
+
 
       <div class="ansi-screen">
         <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.palettes")) }}</div>
@@ -479,14 +487,6 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
             data-testid="reset-all"
             @click="resetAll"
           >{{ t("bc250.resetAll") }}</button>
-        </div>
-        <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
-      </div>
-
-      <div class="ansi-screen" data-testid="warning">
-        <div class="ansi-frame ansi-frame--titled">{{ top("!") }}</div>
-        <div v-for="(l, i) in lines('warning')" :key="i" class="ansi-line">
-          <span class="row-edge">║ </span><span class="body-text">{{ pad(l) }}</span><span class="row-edge"> ║</span>
         </div>
         <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
       </div>
