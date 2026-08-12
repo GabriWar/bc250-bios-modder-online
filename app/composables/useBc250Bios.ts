@@ -17,6 +17,7 @@ import {
 	type PaletteRef,
 	type ImageFormat,
 } from "~/utils/bc250/palette.ts";
+import { findUmaQuestion, makeUmaTypable, UMA_MAX_MB } from "~/utils/bc250/uma.ts";
 
 export interface RomInfo {
 	revision: string;
@@ -24,6 +25,8 @@ export interface RomInfo {
 	budget: Budget;
 	palettes: PaletteRef[];
 	logo: { url: string; width: number; height: number; bytes: number; format: ImageFormat } | null;
+	/** null when this build does not carry the carveout question where we look */
+	uma: { typable: boolean; max: number } | null;
 }
 
 // Anything that goes wrong reaches both places: the panel the user is looking
@@ -106,8 +109,10 @@ export function useBc250Bios() {
 				};
 			}
 
+			const uma = findUmaQuestion(container);
 			info.value = {
 				revision: detectRevision(container.payload),
+				uma: uma ? { typable: uma.typable, max: uma.max } : null,
 				fileCount: container.files.length,
 				budget: measureBudget(container),
 				palettes,
@@ -127,6 +132,7 @@ export function useBc250Bios() {
 		edits: Map<number, number>,
 		restored: Set<number>,
 		logo?: Uint8Array | null,
+		typableUma = false,
 	): Promise<Blob> {
 		if (!container || !original) throw new Error("no ROM loaded");
 		busy.value = true;
@@ -143,6 +149,8 @@ export function useBc250Bios() {
 			for (const index of restored)
 				for (const p of palettes) setColor(container, p, index, STOCK[p.which][index] ?? 0);
 			for (const [index, rgb] of edits) setColorEverywhere(container, palettes, index, rgb);
+
+			if (typableUma) makeUmaTypable(container);
 
 			if (logo) await replaceLogo(container, logo, lzma);
 
@@ -173,6 +181,12 @@ export function useBc250Bios() {
 				const back = await findLogo(check, lzma);
 				if (!back || back.data.length !== logo.length || !back.data.every((v, i) => v === logo[i]))
 					throw new Error("the logo does not read back as written");
+			}
+
+			if (typableUma) {
+				const back = findUmaQuestion(check);
+				if (!back?.typable || back.max !== UMA_MAX_MB)
+					throw new Error("the carveout field did not come back as a typed value");
 			}
 
 			status.value = "verifying colours";

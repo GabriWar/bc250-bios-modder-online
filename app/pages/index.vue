@@ -21,6 +21,7 @@ const dragging = ref(false);
 const filename = ref("");
 const downloadUrl = ref("");
 const acked = ref(false);
+const umaTypable = ref(false);
 const selected = ref(SAFE_INDEX);
 
 const edits = ref(new Map<number, number>());
@@ -198,6 +199,7 @@ function onDrop(e: DragEvent) {
 function reset() {
 	edits.value = new Map();
 	restored.value = new Set();
+	umaTypable.value = false;
 	selected.value = SAFE_INDEX;
 	newLogo.value = null;
 	logoSource.value = null;
@@ -208,7 +210,7 @@ function reset() {
 async function generate() {
 	error.value = "";
 	try {
-		downloadUrl.value = URL.createObjectURL(await build(edits.value, restored.value, newLogo.value?.bytes));
+		downloadUrl.value = URL.createObjectURL(await build(edits.value, restored.value, newLogo.value?.bytes, umaTypable.value));
 	} catch (e) {
 		console.error("[bc250] generate", e);
 		error.value = e instanceof Error ? e.message : String(e);
@@ -551,6 +553,23 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
       <Bc250Screen :colors="shown" :popup-colors="shownPopup" />
       <Bc250Console :colors="shown" />
 
+      <div v-if="info.uma" class="ansi-screen" data-testid="uma">
+        <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.umaTitle")) }}</div>
+        <div v-for="(l, i) in lines('umaNote')" :key="i" class="ansi-line">
+          <span class="row-edge">║ </span><span class="dim-text">{{ pad(l) }}</span><span class="row-edge"> ║</span>
+        </div>
+        <div class="actions">
+          <SCheckbox
+            v-if="!info.uma.typable"
+            v-model="umaTypable"
+            class="tick"
+            data-testid="uma-check"
+          >{{ t("bc250.umaEnable") }}</SCheckbox>
+          <span v-else class="dim-text">{{ t("bc250.umaAlready") }}</span>
+        </div>
+        <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
+      </div>
+
       <div v-if="contrastProblems.length" class="ansi-screen warn" data-testid="contrast-warn">
         <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.contrastTitle")) }}</div>
         <div v-for="p in contrastProblems" :key="p.what" class="warn-row">
@@ -571,7 +590,7 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
       <div class="ansi-screen">
         <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.output")) }}</div>
         <div class="actions">
-          <button class="link" :disabled="busy || (!edits.size && !restored.size && !newLogo)" data-testid="generate" @click="generate">
+          <button class="link" :disabled="busy || (!edits.size && !restored.size && !newLogo && !umaTypable)" data-testid="generate" @click="generate">
             {{ busy ? status + " ..." : t("bc250.generate") }}
           </button>
           <a

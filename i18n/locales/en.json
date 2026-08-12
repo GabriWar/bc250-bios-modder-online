@@ -1059,6 +1059,16 @@
 			"console": "console and shell text"
 		},
 		"foreground": "foreground",
-		"onBackground": "on background"
+		"onBackground": "on background",
+		"umaTitle": "memory carveout",
+		"umaEnable": "let me type the UMA size instead of picking from the list",
+		"umaAlready": "this image already takes a typed value",
+		"umaNote": [
+			"the UMA frame buffer is a dropdown of fixed sizes. the",
+			"question underneath is one byte away from being a field",
+			"you type into, capped at 15360 MB so a slip cannot ask",
+			"for more memory than the board has. tested on hardware:",
+			"13312 typed in gave exactly 3072 MB back to the OS."
+		]
 	}
 }
