@@ -47,6 +47,7 @@ function withEdits(base: number[]): number[] {
 }
 
 const previewColors = computed(() => withEdits(info.value?.palettes[0]?.colors ?? []));
+const popupColors = computed(() => withEdits(info.value?.palettes[1]?.colors ?? []));
 
 const currentColor = computed({
 	get: () => hex(previewColors.value[selected.value] ?? 0),
@@ -269,7 +270,7 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
         <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.logo")) }}</div>
         <div class="previews">
           <figure class="preview">
-            <div class="screen-frame">
+            <div class="screen-frame" :style="{ background: hex(previewColors[0] ?? 0) }">
               <img :src="info.logo.url" :style="onScreen(info.logo.width)" alt="boot logo">
             </div>
             <figcaption class="dim-text">
@@ -277,7 +278,7 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
             </figcaption>
           </figure>
           <figure v-if="newLogo" class="preview">
-            <div class="screen-frame">
+            <div class="screen-frame" :style="{ background: hex(previewColors[0] ?? 0) }">
               <img :src="newLogo.url" :style="onScreen(newLogo.width)" alt="new boot logo">
             </div>
             <figcaption class="dim-text">
@@ -357,7 +358,8 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
         <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
       </div>
 
-      <Bc250Screen :colors="previewColors" />
+      <Bc250Screen :colors="previewColors" :popup-colors="popupColors" />
+        <Bc250Console :colors="previewColors" />
 
       <div class="ansi-screen">
         <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.output")) }}</div>
@@ -490,7 +492,6 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #000;
   border: 1px solid var(--color-border);
 }
 

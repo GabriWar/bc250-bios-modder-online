@@ -17,23 +17,26 @@ const REPORT = "https://github.com/GabriWar/bc250-bios-modder-online/issues";
 
 export const PALETTE_SIZE = 16;
 
+// Read off a board flashed with one unmistakable colour per index. Several of
+// these are not where you would expect: read-only fields are 8 rather than 0,
+// and 0 turns up as the POST background and the shadow under a dialog.
 export const ROLES: Record<number, string> = {
-	0: "help and info text; POST background",
-	1: "body text and default dialog background",
-	2: "success dialogs",
+	0: "section headings; POST and shell background; dialog shadow and selection",
+	1: "body text; title and footer bars; dialog background",
+	2: "boot manager selection",
 	3: "unused",
-	4: "error dialogs",
+	4: "driver error messages",
 	5: "unused",
 	6: "unused",
-	7: "body background; selected row text",
-	8: "unused",
+	7: "screen background; footer text",
+	8: "read-only fields and their values",
 	9: "POST console messages",
 	10: "POST console messages",
 	11: "POST console messages",
 	12: "POST console messages",
 	13: "POST console messages",
 	14: "POST console messages",
-	15: "section titles; POST foreground",
+	15: "editable values; title text; dialog text and border",
 };
 
 export interface PaletteRef {
