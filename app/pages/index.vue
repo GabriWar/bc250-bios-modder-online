@@ -13,7 +13,8 @@ useSeoMeta({
 
 import { STOCK, ROLES } from "~/utils/bc250/palette.ts";
 
-const { busy, status, error, info, progress, load, build } = useBc250Bios();
+const { busy, status, error, info, progress, checks, biosMap, load, build, inspect, mapMenus } =
+	useBc250Bios();
 
 const SAFE_INDEX = 1;
 
@@ -22,6 +23,7 @@ const filename = ref("");
 const downloadUrl = ref("");
 const acked = ref(false);
 const umaTypable = ref(false);
+const socDebugTab = ref(false);
 const selected = ref(SAFE_INDEX);
 
 const edits = ref(new Map<number, number>());
@@ -181,6 +183,40 @@ const contrastProblems = computed(() =>
 
 const risky = computed(() => [...edits.value.keys()].some((i) => i !== SAFE_INDEX));
 
+const checkSummary = computed(() => {
+	const ok = checks.value.filter((c) => c.ok).length;
+	const bad = checks.value.filter((c) => !c.ok && c.severe).length;
+	return t("bc250.checksSummary", { ok, all: checks.value.length, bad });
+});
+
+// The map is long enough that scrolling it in a terminal frame would be worse
+// than reading it in an editor, so the panel summarises and the full tree goes
+// out as a file.
+const mapSummary = computed(() => {
+	const m = biosMap.value;
+	if (!m) return [];
+	let forms = 0;
+	let questions = 0;
+	for (const fs of m.formsets) {
+		forms += fs.forms.length;
+		for (const f of fs.forms) for (const i of f.items) if (i.questionId !== undefined) questions++;
+	}
+	const out = [
+		pair(t("bc250.mapFormsets"), String(m.formsets.length)),
+		pair(t("bc250.mapPages"), String(forms)),
+		pair(t("bc250.mapQuestions"), String(questions)),
+		pair(t("bc250.mapTabs"), String(m.tabs.length)),
+		pair(t("bc250.mapLocked"), String(m.locked.length)),
+		"",
+	];
+	for (const l of m.locked)
+		out.push(`  ${String(l.items).padStart(3)}  ${l.title ?? "form " + l.id}`);
+	return out;
+});
+
+const showChecks = ref(true);
+const mapFull = ref(false);
+
 async function onFile(file?: File | null) {
 	if (!file) return;
 	filename.value = file.name;
@@ -200,6 +236,7 @@ function reset() {
 	edits.value = new Map();
 	restored.value = new Set();
 	umaTypable.value = false;
+	socDebugTab.value = false;
 	selected.value = SAFE_INDEX;
 	newLogo.value = null;
 	logoSource.value = null;
@@ -207,10 +244,33 @@ function reset() {
 	downloadUrl.value = "";
 }
 
+// Checking without building. Useful on a ROM you did not make: it says what is
+// in there and whether it is structurally sound, without spending the minute a
+// full recompress costs.
+async function runCheck() {
+	error.value = "";
+	try {
+		await inspect();
+	} catch (e) {
+		console.error("[bc250] check", e);
+		error.value = e instanceof Error ? e.message : String(e);
+	}
+}
+
+async function runMap() {
+	error.value = "";
+	try {
+		await mapMenus();
+	} catch (e) {
+		console.error("[bc250] map", e);
+		error.value = e instanceof Error ? e.message : String(e);
+	}
+}
+
 async function generate() {
 	error.value = "";
 	try {
-		downloadUrl.value = URL.createObjectURL(await build(edits.value, restored.value, newLogo.value?.bytes, umaTypable.value));
+		downloadUrl.value = URL.createObjectURL(await build(edits.value, restored.value, newLogo.value?.bytes, umaTypable.value, socDebugTab.value));
 	} catch (e) {
 		console.error("[bc250] generate", e);
 		error.value = e instanceof Error ? e.message : String(e);
@@ -570,6 +630,23 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
         <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
       </div>
 
+      <div v-if="info.tabs" class="ansi-screen" data-testid="tabs">
+        <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.tabsTitle")) }}</div>
+        <div v-for="(l, i) in lines('tabsNote')" :key="i" class="ansi-line">
+          <span class="row-edge">║ </span><span class="dim-text">{{ pad(l) }}</span><span class="row-edge"> ║</span>
+        </div>
+        <div class="actions">
+          <SCheckbox
+            v-if="info.tabs.canUnlock"
+            v-model="socDebugTab"
+            class="tick"
+            data-testid="tabs-check"
+          >{{ t("bc250.tabsEnable", { n: info.tabs.read + 1 }) }}</SCheckbox>
+          <span v-else class="dim-text">{{ info.tabs.reason ?? t("bc250.tabsAlready") }}</span>
+        </div>
+        <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
+      </div>
+
       <div v-if="contrastProblems.length" class="ansi-screen warn" data-testid="contrast-warn">
         <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.contrastTitle")) }}</div>
         <div v-for="p in contrastProblems" :key="p.what" class="warn-row">
@@ -590,8 +667,14 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
       <div class="ansi-screen">
         <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.output")) }}</div>
         <div class="actions">
-          <button class="link" :disabled="busy || (!edits.size && !restored.size && !newLogo && !umaTypable)" data-testid="generate" @click="generate">
+          <button class="link" :disabled="busy || (!edits.size && !restored.size && !newLogo && !umaTypable && !socDebugTab)" data-testid="generate" @click="generate">
             {{ busy ? status + " ..." : t("bc250.generate") }}
+          </button>
+          <button class="link" :disabled="busy" data-testid="check" @click="runCheck">
+            {{ t("bc250.checkOnly") }}
+          </button>
+          <button class="link" :disabled="busy" data-testid="map" @click="runMap">
+            {{ t("bc250.mapMenus") }}
           </button>
           <a
             v-if="downloadUrl && unlocked"
@@ -639,9 +722,36 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
         <div class="ansi-line"><span class="row-edge">║ </span><span class="dim-text">{{ pad(t("bc250.verifyNote")) }}</span><span class="row-edge"> ║</span></div>
         <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
       </div>
+
+        <div v-if="checks.length" class="ansi-screen" data-testid="checks">
+          <div class="ansi-frame ansi-frame--titled clickable" @click="showChecks = !showChecks">{{ top((showChecks ? "- " : "+ ") + t("bc250.checksTitle")) }}</div>
+          <div v-show="showChecks" v-for="c in checks" :key="c.name" class="ansi-line">
+            <span class="row-edge">║ </span><span
+              :class="c.ok || !c.severe ? 'dim-text' : 'body-text'"
+            >{{ pad((c.ok ? " ok   " : c.severe ? " FAIL " : " warn ") + c.name + (c.detail ? "  " + c.detail : "")) }}</span><span class="row-edge"> ║</span>
+          </div>
+          <div class="ansi-line">
+            <span class="row-edge">║ </span><span class="dim-text">{{ pad(" " + checkSummary) }}</span><span class="row-edge"> ║</span>
+          </div>
+          <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
+        </div>
+
+        <div v-if="biosMap" class="ansi-screen" data-testid="menu-map">
+          <div class="ansi-frame ansi-frame--titled">{{ top(t("bc250.mapTitle")) }}</div>
+          <div v-for="(l, i) in mapSummary" :key="i" class="ansi-line">
+            <span class="row-edge">║ </span><span class="dim-text">{{ pad(l) }}</span><span class="row-edge"> ║</span>
+          </div>
+          <div class="actions">
+            <button class="link" data-testid="map-open" @click="mapFull = true">
+              {{ t("bc250.mapOpen") }}
+            </button>
+          </div>
+          <div class="ansi-frame ansi-frame--titled">{{ bot() }}</div>
+        </div>
     </template>
   </div>
 
+  <Bc250MapModal v-if="mapFull && biosMap" :map="biosMap" @close="mapFull = false" />
 </template>
 
 <style scoped>
@@ -906,5 +1016,11 @@ const outName = computed(() => filename.value.replace(/\.(rom|bin)$/i, "") + "_r
 .pick input { display: none; }
 .link:disabled { color: var(--color-text-tertiary); cursor: default; }
 .link:hover:not(:disabled) { color: var(--color-text-secondary); }
+.clickable { cursor: pointer; user-select: none; }
+/* The dump has to stay inside the box the frame characters draw. Left to grow,
+   a <pre> is as wide as its longest help string and the ║ edges end up floating
+   in the middle of the text. Pin it to the frame width, scroll inside it, and
+   let the long lines scroll sideways rather than reflow -- these are aligned
+   columns, and wrapping them destroys the alignment that makes them readable. */
 </style>
 

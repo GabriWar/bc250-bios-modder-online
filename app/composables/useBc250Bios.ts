@@ -17,6 +17,9 @@ import {
 	type PaletteRef,
 	type ImageFormat,
 } from "~/utils/bc250/palette.ts";
+import { readTabTable, unlockSocDebugTab } from "~/utils/bc250/tabs.ts";
+import { type BiosMap, buildMap } from "~/utils/bc250/map.ts";
+import { type Check, verifyImage } from "~/utils/bc250/verify.ts";
 import { findUmaQuestion, makeUmaTypable, UMA_MAX_MB } from "~/utils/bc250/uma.ts";
 
 export interface RomInfo {
@@ -27,6 +30,7 @@ export interface RomInfo {
 	logo: { url: string; width: number; height: number; bytes: number; format: ImageFormat } | null;
 	/** null when this build does not carry the carveout question where we look */
 	uma: { typable: boolean; max: number } | null;
+	tabs: { read: number; canUnlock: boolean; reason?: string } | null;
 }
 
 // Anything that goes wrong reaches both places: the panel the user is looking
@@ -71,6 +75,8 @@ export function useBc250Bios() {
 	const progress = ref(0);
 	const error = ref("");
 	const info = ref<RomInfo | null>(null);
+	const checks = ref<Check[]>([]);
+	const biosMap = ref<BiosMap | null>(null);
 
 	let container: Container | null = null;
 	let original: Uint8Array | null = null;
@@ -79,6 +85,8 @@ export function useBc250Bios() {
 		busy.value = true;
 		error.value = "";
 		info.value = null;
+		checks.value = [];
+		biosMap.value = null;
 		progress.value = 0;
 		try {
 			status.value = "reading";
@@ -110,9 +118,14 @@ export function useBc250Bios() {
 			}
 
 			const uma = findUmaQuestion(container);
+			// Reading the tab table means decompressing AMITSE, a second LZMA layer.
+			// Worth it at load time so the option can say up front whether this
+			// image can take the patch at all.
+			const tabs = await readTabTable(container, lzma);
 			info.value = {
 				revision: detectRevision(container.payload),
 				uma: uma ? { typable: uma.typable, max: uma.max } : null,
+				tabs: tabs ? { read: tabs.read, canUnlock: tabs.canUnlock, reason: tabs.reason } : null,
 				fileCount: container.files.length,
 				budget: measureBudget(container),
 				palettes,
@@ -133,6 +146,7 @@ export function useBc250Bios() {
 		restored: Set<number>,
 		logo?: Uint8Array | null,
 		typableUma = false,
+		socDebugTab = false,
 	): Promise<Blob> {
 		if (!container || !original) throw new Error("no ROM loaded");
 		busy.value = true;
@@ -152,6 +166,12 @@ export function useBc250Bios() {
 
 			if (typableUma) makeUmaTypable(container);
 
+			if (socDebugTab) {
+				status.value = "unlocking the extra tab";
+				await step(0.2);
+				await unlockSocDebugTab(container, lzma);
+			}
+
 			if (logo) await replaceLogo(container, logo, lzma);
 
 			status.value = "recompressing";
@@ -161,48 +181,71 @@ export function useBc250Bios() {
 			// Reported step by step. Reopening the image is the slowest thing
 			// here and it blocks the tab, so a single 75% tick is indistinguishable
 			// from a hang to anyone watching the bar.
-			status.value = "verifying size";
-			await step(0.78);
-			if (out.length !== original.length)
-				throw new Error(`size changed: ${out.length} vs ${original.length}`);
-
-			status.value = "reopening the image";
-			await step(0.82);
+			// Verification reports, it does not veto. A failing check is something
+			// to read before flashing, not a reason to withhold the file the user
+			// asked for -- and a thrown error used to mean no download at all.
+			status.value = "verifying";
+			await step(0.8);
 			const check = await openContainer(out, lzma);
+			const found = await verifyImage(
+				check,
+				lzma,
+				{ size: original.length, files: container.files.length },
+				out.length,
+			);
 
-			status.value = "verifying files";
 			await step(0.9);
-			if (check.files.length !== container.files.length)
-				throw new Error(`file count changed: ${check.files.length} vs ${container.files.length}`);
+			for (const p of findPalettes(check)) {
+				for (const index of restored) {
+					const want = STOCK[p.which][index] ?? 0;
+					found.push({
+						name: `${p.which} ${index} back to factory`,
+						ok: p.colors[index] === want,
+						detail: `#${(p.colors[index] ?? 0).toString(16).padStart(6, "0")}`,
+						severe: true,
+					});
+				}
+				for (const [index, rgb] of edits) {
+					found.push({
+						name: `${p.which} ${index} repainted`,
+						ok: p.colors[index] === rgb,
+						detail: `#${(p.colors[index] ?? 0).toString(16).padStart(6, "0")}`,
+						severe: true,
+					});
+				}
+			}
 
 			if (logo) {
-				status.value = "verifying logo";
-				await step(0.94);
 				const back = await findLogo(check, lzma);
-				if (!back || back.data.length !== logo.length || !back.data.every((v, i) => v === logo[i]))
-					throw new Error("the logo does not read back as written");
+				found.push({
+					name: "boot logo reads back",
+					ok: !!back && back.data.length === logo.length && back.data.every((v, i) => v === logo[i]),
+					detail: `${back?.data.length ?? 0} bytes`,
+					severe: true,
+				});
 			}
 
 			if (typableUma) {
 				const back = findUmaQuestion(check);
-				if (!back?.typable || back.max !== UMA_MAX_MB)
-					throw new Error("the carveout field did not come back as a typed value");
+				found.push({
+					name: "carveout is typable",
+					ok: !!back?.typable && back.max === UMA_MAX_MB,
+					detail: back ? `max ${back.max} MB` : "question not found",
+					severe: true,
+				});
 			}
 
-			status.value = "verifying colours";
-			await step(0.97);
-			for (const p of findPalettes(check)) {
-				for (const index of restored)
-					if (p.colors[index] !== (STOCK[p.which][index] ?? 0))
-						throw new Error(
-							`${p.which} index ${index} did not go back to factory: reads #${p.colors[index]!.toString(16)}`,
-						);
-				for (const [index, rgb] of edits)
-					if (p.colors[index] !== rgb)
-						throw new Error(
-							`${p.which} index ${index} reads back #${p.colors[index]!.toString(16)}`,
-						);
+			if (socDebugTab) {
+				const back = await readTabTable(check, lzma);
+				found.push({
+					name: "eighth tab present",
+					ok: back?.read === 8 && back.formIds[7] === 28682,
+					detail: back ? `${back.read} tabs, eighth = form ${back.formIds[7]}` : "table not read",
+					severe: true,
+				});
 			}
+
+			checks.value = found;
 
 			status.value = "";
 			progress.value = 1;
@@ -220,5 +263,64 @@ export function useBc250Bios() {
 		await paint();
 	}
 
-	return { busy, status, error, info, progress, load, build };
+	/** Runs the same report over the loaded ROM without building anything. */
+	async function inspect(): Promise<Check[]> {
+		if (!container || !original) throw new Error("no ROM loaded");
+		busy.value = true;
+		try {
+			status.value = "checking";
+			progress.value = 0.5;
+			const lzma = await getCodec();
+			const found = await verifyImage(
+				container,
+				lzma,
+				{ size: original.length, files: container.files.length },
+				original.length,
+			);
+			checks.value = found;
+			return found;
+		} catch (e) {
+			report("checking the image", e);
+			throw e;
+		} finally {
+			status.value = "";
+			progress.value = 0;
+			busy.value = false;
+		}
+	}
+
+	/** Parses every menu, option and description, including the locked pages. */
+	async function mapMenus(): Promise<BiosMap> {
+		if (!container) throw new Error("no ROM loaded");
+		busy.value = true;
+		try {
+			status.value = "reading the menus";
+			progress.value = 0.5;
+			const lzma = await getCodec();
+			const built = await buildMap(container, lzma);
+			biosMap.value = built;
+			return built;
+		} catch (e) {
+			report("reading the menus", e);
+			throw e;
+		} finally {
+			status.value = "";
+			progress.value = 0;
+			busy.value = false;
+		}
+	}
+
+	return {
+		busy,
+		status,
+		error,
+		info,
+		progress,
+		checks,
+		biosMap,
+		load,
+		build,
+		inspect,
+		mapMenus,
+	};
 }
